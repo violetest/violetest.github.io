@@ -611,8 +611,6 @@
     <link rel="apple-touch-icon" href="icon-192x192.png">
 </head>
 <body>
-    <div class="click-message" id="click-message">(-_-) Зачем ты меня кликаешь...</div>
-
     <div class="keyboard-container" id="keyboard">
         <button class="keyboard-close" onclick="hideKeyboard()">
             <i class="fas fa-times"></i>
@@ -1359,18 +1357,8 @@
         function handleDateClick() {
             clickCount++;
             if (clickCount >= 10) {
-                showClickMessage();
-                clickCount = 0;
+                window.location.href = 'credits.html';
             }
-        }
-        
-        // Показать сообщение при клике
-        function showClickMessage() {
-            const message = document.getElementById('click-message');
-            message.style.display = 'block';
-            setTimeout(() => {
-                message.style.display = 'none';
-            }, 10000); // 10 секунд
         }
         
         // Обновление даты и времени
