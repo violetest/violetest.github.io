@@ -1,0 +1,1616 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PurpleTerminal PRO</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+            user-select: none;
+        }
+
+        body {
+            background-color: #0a0a0a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: #e0e0e0;
+            overflow: hidden;
+        }
+
+        .terminal {
+            width: 1024px;
+            height: 768px;
+            background: linear-gradient(145deg, #1e1e2f, #2a2a3a);
+            border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+            overflow: hidden;
+            position: relative;
+            border: 2px solid #3a3a4a;
+            display: flex;
+        }
+
+        .banner-panel {
+            width: 200px;
+            background: linear-gradient(180deg, #2a2a3a, #1a1a2a);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border-right: 1px solid #3a3a4a;
+        }
+
+        .banner-logo {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, #6a3093, #a044ff);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 40px;
+            font-weight: bold;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 20px rgba(106, 48, 147, 0.5);
+        }
+
+        .banner-menu {
+            width: 100%;
+            margin-top: 30px;
+        }
+
+        .banner-item {
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            color: #b388ff;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+        }
+
+        .banner-item i {
+            margin-right: 10px;
+            font-size: 20px;
+        }
+
+        .banner-item:hover, .banner-item.active {
+            background: rgba(106, 48, 147, 0.3);
+            color: white;
+        }
+
+        .banner-footer {
+            margin-top: auto;
+            text-align: center;
+            font-size: 14px;
+            color: #888;
+        }
+
+        .content-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background: linear-gradient(90deg, #6a3093, #a044ff);
+            padding: 15px 25px;
+            text-align: center;
+            color: white;
+            font-weight: bold;
+            font-size: 24px;
+            box-shadow: 0 5px 15px rgba(106, 48, 147, 0.6);
+            position: relative;
+            z-index: 10;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .user-avatar-small {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #6a3093, #a044ff);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .screen-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .screen {
+            flex: 1;
+            padding: 25px;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .screen-content {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeIn 0.5s forwards;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .login-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(145deg, #1e1e2f, #2a2a3a);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: all 0.5s;
+        }
+
+        .login-screen.hidden {
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(-50px);
+        }
+
+        .login-title {
+            font-size: 36px;
+            margin-bottom: 40px;
+            color: #b388ff;
+            text-align: center;
+        }
+
+        .login-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            width: 300px;
+        }
+
+        .login-btn {
+            background: linear-gradient(90deg, #6a3093, #a044ff);
+            color: white;
+            border: none;
+            padding: 20px;
+            border-radius: 30px;
+            font-size: 22px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 6px 12px rgba(106, 48, 147, 0.4);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .login-btn i {
+            margin-right: 15px;
+            font-size: 28px;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-3px) translateY(20px);
+            box-shadow: 0 9px 18px rgba(106, 48, 147, 0.5);
+        }
+
+        .login-btn:active {
+            transform: translateY(0) translateY(20px);
+        }
+
+        .btn {
+            background: linear-gradient(90deg, #6a3093, #a044ff);
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 30px;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 6px 12px rgba(106, 48, 147, 0.4);
+            margin: 10px 0;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 9px 18px rgba(106, 48, 147, 0.5);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: #3a3a4a;
+            color: #b388ff;
+        }
+
+        .input-field {
+            background-color: #2a2a3a;
+            border: 2px solid #3a3a4a;
+            border-radius: 15px;
+            padding: 15px 20px;
+            color: white;
+            font-size: 20px;
+            width: 100%;
+            margin-bottom: 20px;
+            transition: all 0.3s;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #a044ff;
+            box-shadow: 0 0 0 3px rgba(106, 48, 147, 0.4);
+        }
+
+        .card {
+            background-color: #2a2a3a;
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            border: 2px solid #3a3a4a;
+        }
+
+        .card-title {
+            color: #b388ff;
+            margin-bottom: 20px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .service-item {
+            display: flex;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 2px solid #3a3a4a;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .service-item:last-child {
+            border-bottom: none;
+        }
+
+        .service-item:hover {
+            background-color: #3a3a4a;
+            border-radius: 12px;
+            padding-left: 15px;
+        }
+
+        .service-icon {
+            width: 60px;
+            height: 60px;
+            background-color: #6a3093;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 20px;
+            color: white;
+            font-size: 24px;
+        }
+
+        .service-name {
+            flex-grow: 1;
+            font-size: 22px;
+        }
+
+        .service-arrow {
+            color: #b388ff;
+            font-size: 28px;
+        }
+
+        .user-avatar {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, #6a3093, #a044ff);
+            border-radius: 50%;
+            margin: 0 auto 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 40px;
+            font-weight: bold;
+            box-shadow: 0 8px 20px rgba(106, 48, 147, 0.5);
+        }
+
+        .user-name {
+            text-align: center;
+            font-size: 28px;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .user-phone {
+            text-align: center;
+            color: #b388ff;
+            font-size: 22px;
+            margin-bottom: 30px;
+        }
+
+        .balance {
+            background: linear-gradient(90deg, #6a3093, #a044ff);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 20px rgba(106, 48, 147, 0.4);
+        }
+
+        .balance-label {
+            font-size: 20px;
+            margin-bottom: 10px;
+            opacity: 0.8;
+        }
+
+        .balance-amount {
+            font-size: 32px;
+            font-weight: bold;
+        }
+
+        .transaction {
+            display: flex;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 2px solid #3a3a4a;
+        }
+
+        .transaction:last-child {
+            border-bottom: none;
+        }
+
+        .transaction-icon {
+            width: 60px;
+            height: 60px;
+            background-color: #3a3a4a;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 20px;
+            color: #b388ff;
+            font-size: 24px;
+        }
+
+        .transaction-details {
+            flex-grow: 1;
+        }
+
+        .transaction-title {
+            font-size: 22px;
+            margin-bottom: 5px;
+        }
+
+        .transaction-date {
+            font-size: 18px;
+            color: #888;
+        }
+
+        .transaction-amount {
+            font-weight: bold;
+            font-size: 22px;
+            color: #4caf50;
+        }
+
+        .info-text {
+            line-height: 1.6;
+            margin-bottom: 20px;
+            font-size: 20px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .payment-form {
+            animation: fadeIn 0.5s forwards;
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            color: #b388ff;
+            font-size: 22px;
+            cursor: pointer;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            padding: 10px;
+        }
+
+        .back-btn i {
+            margin-right: 10px;
+            font-size: 26px;
+        }
+
+        .payment-success {
+            text-align: center;
+            padding: 60px 30px;
+            animation: fadeIn 0.5s forwards;
+        }
+
+        .success-icon {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, #4caf50, #8bc34a);
+            border-radius: 50%;
+            margin: 0 auto 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 60px;
+            box-shadow: 0 8px 20px rgba(76, 175, 80, 0.5);
+        }
+
+        .success-title {
+            font-size: 32px;
+            margin-bottom: 15px;
+            color: #4caf50;
+        }
+
+        .success-text {
+            margin-bottom: 30px;
+            opacity: 0.8;
+            font-size: 22px;
+        }
+
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 150px;
+        }
+
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 6px solid rgba(106, 48, 147, 0.2);
+            border-top: 6px solid #a044ff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 2px solid #3a3a4a;
+        }
+
+        .contact-item:last-child {
+            border-bottom: none;
+        }
+
+        .contact-icon {
+            width: 60px;
+            height: 60px;
+            background-color: #6a3093;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 20px;
+            color: white;
+            font-size: 24px;
+        }
+
+        .contact-text {
+            flex-grow: 1;
+            font-size: 22px;
+        }
+
+        .keyboard-container {
+            position: fixed;
+            bottom: -400px;
+            left: 0;
+            right: 0;
+            background: #2a2a3a;
+            padding: 20px;
+            border-top: 2px solid #3a3a4a;
+            box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.5);
+            transition: transform 0.4s ease-out;
+            z-index: 100;
+        }
+
+        .keyboard-container.visible {
+            transform: translateY(-400px);
+        }
+
+        .keyboard {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .keyboard-row {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .keyboard-key {
+            background: #3a3a4a;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 24px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.2s;
+            flex: 1;
+            text-align: center;
+            min-width: 50px;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        .keyboard-key:hover {
+            background: #4a4a5a;
+            transform: translateY(-2px);
+        }
+
+        .keyboard-key:active {
+            background: #6a3093;
+            transform: translateY(0);
+        }
+
+        .keyboard-key.wide {
+            flex: 2;
+        }
+
+        .keyboard-key.space {
+            flex: 8;
+        }
+
+        .keyboard-key.func {
+            background: #6a3093;
+        }
+
+        .keyboard-key.func:hover {
+            background: #7a40a3;
+        }
+
+        .keyboard-key.func:active {
+            background: #5a2083;
+        }
+
+        .keyboard-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            color: #b388ff;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+
+        .typing-effect {
+            overflow: hidden;
+            white-space: nowrap;
+            animation: typing 3s steps(40, end);
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 99;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        .overlay.visible {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .id-input-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(42, 42, 58, 0.9);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            z-index: 1001;
+            text-align: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.5s;
+            width: 400px;
+        }
+
+        .id-input-container.visible {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .id-input-title {
+            font-size: 28px;
+            margin-bottom: 30px;
+            color: #b388ff;
+        }
+
+        .id-input-field {
+            background: #3a3a4a;
+            border: 2px solid #6a3093;
+            border-radius: 15px;
+            padding: 15px 20px;
+            color: white;
+            font-size: 24px;
+            width: 100%;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .id-submit-btn {
+            background: linear-gradient(90deg, #6a3093, #a044ff);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 30px;
+            font-size: 22px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 6px 12px rgba(106, 48, 147, 0.4);
+            width: 100%;
+        }
+
+        .id-submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 9px 18px rgba(106, 48, 147, 0.5);
+        }
+
+        .id-submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #3a3a4a;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: #6a3093;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="overlay" id="keyboard-overlay"></div>
+    
+    <div class="login-screen" id="login-screen">
+        <div class="login-title">PurpleTerminal PRO</div>
+        <div class="login-buttons" id="login-buttons">
+            <button class="login-btn" onclick="showScreen('services-screen')">
+                <i class="fas fa-list"></i> Услуги
+            </button>
+            <button class="login-btn" onclick="showScreen('account-screen')">
+                <i class="fas fa-user"></i> Личный кабинет
+            </button>
+            <button class="login-btn" onclick="showScreen('info-screen')">
+                <i class="fas fa-info-circle"></i> Информация
+            </button>
+        </div>
+    </div>
+
+    <div class="terminal" id="terminal">
+        <div class="banner-panel">
+            <div class="banner-logo">P</div>
+            
+            <div class="banner-menu">
+                <div class="banner-item active" onclick="showScreen('main-screen')">
+                    <i class="fas fa-home"></i> Главная
+                </div>
+                <div class="banner-item" onclick="showScreen('services-screen')">
+                    <i class="fas fa-list"></i> Услуги
+                </div>
+                <div class="banner-item" onclick="showScreen('account-screen')">
+                    <i class="fas fa-user"></i> Аккаунт
+                </div>
+                <div class="banner-item" onclick="showScreen('history-screen')">
+                    <i class="fas fa-history"></i> История
+                </div>
+                <div class="banner-item" onclick="showScreen('info-screen')">
+                    <i class="fas fa-info-circle"></i> Информация
+                </div>
+            </div>
+            
+            <div class="banner-footer">
+                Версия 3.1.0<br>
+                © 2024 PurpleTerminal
+            </div>
+        </div>
+        
+        <div class="content-panel">
+            <div class="header">
+                <div>PurpleTerminal PRO</div>
+                <div class="user-info">
+                    <div class="user-avatar-small">AK</div>
+                    <div>Алексей К.</div>
+                </div>
+            </div>
+            
+            <div class="screen-container">
+                <div class="screen">
+                    <div id="main-screen" class="screen-content">
+                        <div class="user-avatar">AK</div>
+                        <div class="user-name">Алексей К.</div>
+                        <div class="user-phone">+7 (912) 345-67-89</div>
+                        
+                        <div class="balance">
+                            <div class="balance-label">Баланс</div>
+                            <div class="balance-amount">5 428 ₽</div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-title">Последние операции</div>
+                            <div class="transaction">
+                                <div class="transaction-icon">
+                                    <i class="fas fa-mobile-alt"></i>
+                                </div>
+                                <div class="transaction-details">
+                                    <div class="transaction-title">Пополнение телефона</div>
+                                    <div class="transaction-date">Сегодня, 14:30</div>
+                                </div>
+                                <div class="transaction-amount">-500 ₽</div>
+                            </div>
+                            <div class="transaction">
+                                <div class="transaction-icon">
+                                    <i class="fas fa-wifi"></i>
+                                </div>
+                                <div class="transaction-details">
+                                    <div class="transaction-title">Интернет Дома</div>
+                                    <div class="transaction-date">Вчера, 09:15</div>
+                                </div>
+                                <div class="transaction-amount">-600 ₽</div>
+                            </div>
+                            <div class="transaction">
+                                <div class="transaction-icon">
+                                    <i class="fas fa-coins"></i>
+                                </div>
+                                <div class="transaction-details">
+                                    <div class="transaction-title">Пополнение баланса</div>
+                                    <div class="transaction-date">15 марта, 18:45</div>
+                                </div>
+                                <div class="transaction-amount">+2 000 ₽</div>
+                            </div>
+                        </div>
+                        
+                        <button class="btn" style="width: 100%;" onclick="showScreen('services-screen')">
+                            <i class="fas fa-plus-circle"></i> Пополнить баланс
+                        </button>
+                    </div>
+                    
+                    <div id="services-screen" class="screen-content hidden">
+                        <button class="back-btn" onclick="showScreen('main-screen')">
+                            <i class="fas fa-arrow-left"></i> Назад
+                        </button>
+                        
+                        <div class="card">
+                            <div class="card-title">Популярные услуги</div>
+                            <div class="service-item" onclick="selectService('mobile')">
+                                <div class="service-icon">
+                                    <i class="fas fa-mobile-alt"></i>
+                                </div>
+                                <div class="service-name">Мобильная связь</div>
+                                <div class="service-arrow">
+                                    <i class="fas fa-chevron-right"></i>
+                                </div>
+                            </div>
+                            <div class="service-item" onclick="selectService('internet')">
+                                <div class="service-icon">
+                                    <i class="fas fa-wifi"></i>
+                                </div>
+                                <div class="service-name">Интернет и ТВ</div>
+                                <div class="service-arrow">
+                                    <i class="fas fa-chevron-right"></i>
+                                </div>
+                            </div>
+                            <div class="service-item" onclick="selectService('utilities')">
+                                <div class="service-icon">
+                                    <i class="fas fa-home"></i>
+                                </div>
+                                <div class="service-name">ЖКХ и коммунальные</div>
+                                <div class="service-arrow">
+                                    <i class="fas fa-chevron-right"></i>
+                                </div>
+                            </div>
+                            <div class="service-item" onclick="selectService('games')">
+                                <div class="service-icon">
+                                    <i class="fas fa-gamepad"></i>
+                                </div>
+                                <div class="service-name">Игры и развлечения</div>
+                                <div class="service-arrow">
+                                    <i class="fas fa-chevron-right"></i>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-title">Другие услуги</div>
+                            <div class="service-item" onclick="selectService('transport')">
+                                <div class="service-icon">
+                                    <i class="fas fa-bus"></i>
+                                </div>
+                                <div class="service-name">Транспортные карты</div>
+                                <div class="service-arrow">
+                                    <i class="fas fa-chevron-right"></i>
+                                </div>
+                            </div>
+                            <div class="service-item" onclick="selectService('education')">
+                                <div class="service-icon">
+                                    <i class="fas fa-graduation-cap"></i>
+                                </div>
+                                <div class="service-name">Образование</div>
+                                <div class="service-arrow">
+                                    <i class="fas fa-chevron-right"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="mobile-screen" class="screen-content hidden">
+                        <button class="back-btn" onclick="showScreen('services-screen')">
+                            <i class="fas fa-arrow-left"></i> Назад
+                        </button>
+                        
+                        <div class="card">
+                            <div class="card-title">Выберите оператора</div>
+                            <div class="service-item" onclick="showPaymentForm('МТС')">
+                                <div class="service-icon" style="background-color: #e30611;">
+                                    <i class="fas fa-sim-card"></i>
+                                </div>
+                                <div class="service-name">МТС</div>
+                                <div class="service-arrow">
+                                    <i class="fas fa-chevron-right"></i>
+                                </div>
+                            </div>
+                            <div class="service-item" onclick="showPaymentForm('Билайн')">
+                                <div class="service-icon" style="background-color: #ffc600;">
+                                    <i class="fas fa-sim-card"></i>
+                                </div>
+                                <div class="service-name">Билайн</div>
+                                <div class="service-arrow">
+                                    <i class="fas fa-chevron-right"></i>
+                                </div>
+                            </div>
+                            <div class="service-item" onclick="showPaymentForm('Мегафон')">
+                                <div class="service-icon" style="background-color: #27ae60;">
+                                    <i class="fas fa-sim-card"></i>
+                                </div>
+                                <div class="service-name">Мегафон</div>
+                                <div class="service-arrow">
+                                    <i class="fas fa-chevron-right"></i>
+                                </div>
+                            </div>
+                            <div class="service-item" onclick="showPaymentForm('Теле2')">
+                                <div class="service-icon" style="background-color: #000000;">
+                                    <i class="fas fa-sim-card"></i>
+                                </div>
+                                <div class="service-name">Теле2</div>
+                                <div class="service-arrow">
+                                    <i class="fas fa-chevron-right"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="payment-screen" class="screen-content hidden">
+                        <div class="payment-form">
+                            <button class="back-btn" onclick="goBackFromPayment()">
+                                <i class="fas fa-arrow-left"></i> Назад
+                            </button>
+                            
+                            <div class="card">
+                                <div class="card-title">Пополнение телефона <span id="provider-name"></span></div>
+                                
+                                <input type="tel" class="input-field" placeholder="Номер телефона" id="phone-number" value="+7 (912) 345-67-89" readonly
+                                       onclick="showKeyboard('phone-number')">
+                                
+                                <input type="number" class="input-field" placeholder="Сумма (руб)" id="payment-amount" 
+                                       onclick="showKeyboard('payment-amount', true)">
+                                
+                                <button class="btn" style="width: 100%;" onclick="processPayment()">
+                                    <i class="fas fa-paper-plane"></i> Оплатить
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="success-screen" class="screen-content hidden">
+                        <div class="payment-success">
+                            <div class="success-icon">
+                                <i class="fas fa-check"></i>
+                            </div>
+                            <div class="success-title">Оплата прошла успешно!</div>
+                            <div class="success-text">Средства зачислены на счет</div>
+                            
+                            <div class="card" style="text-align: left; margin-bottom: 20px;">
+                                <div style="margin-bottom: 15px; font-size: 22px;">
+                                    <span style="opacity: 0.7;">Услуга:</span>
+                                    <span id="success-service"></span>
+                                </div>
+                                <div style="margin-bottom: 15px; font-size: 22px;">
+                                    <span style="opacity: 0.7;">Номер:</span>
+                                    <span id="success-phone"></span>
+                                </div>
+                                <div style="margin-bottom: 15px; font-size: 22px;">
+                                    <span style="opacity: 0.7;">Сумма:</span>
+                                    <span id="success-amount"></span>
+                                </div>
+                                <div style="font-size: 22px;">
+                                    <span style="opacity: 0.7;">Дата:</span>
+                                    <span id="success-date"></span>
+                                </div>
+                            </div>
+                            
+                            <button class="btn" style="width: 100%;" onclick="showScreen('main-screen')">
+                                <i class="fas fa-home"></i> Вернуться на главную
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div id="account-screen" class="screen-content hidden">
+                        <div class="user-avatar">AK</div>
+                        <div class="user-name">Алексей К.</div>
+                        <div class="user-phone">+7 (912) 345-67-89</div>
+                        
+                        <div class="card">
+                            <div class="card-title">Настройки аккаунта</div>
+                            <div class="service-item" onclick="showScreen('security-screen')">
+                                <div class="service-icon">
+                                    <i class="fas fa-lock"></i>
+                                </div>
+                                <div class="service-name">Безопасность</div>
+                                <div class="service-arrow">
+                                    <i class="fas fa-chevron-right"></i>
+                                </div>
+                            </div>
+                            <div class="service-item" onclick="showScreen('notifications-screen')">
+                                <div class="service-icon">
+                                    <i class="fas fa-bell"></i>
+                                </div>
+                                <div class="service-name">Уведомления</div>
+                                <div class="service-arrow">
+                                    <i class="fas fa-chevron-right"></i>
+                                </div>
+                            </div>
+                            <div class="service-item" onclick="showScreen('history-screen')">
+                                <div class="service-icon">
+                                    <i class="fas fa-history"></i>
+                                </div>
+                                <div class="service-name">История операций</div>
+                                <div class="service-arrow">
+                                    <i class="fas fa-chevron-right"></i>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <button class="btn btn-secondary" style="width: 100%;">
+                            <i class="fas fa-sign-out-alt"></i> Выйти из аккаунта
+                        </button>
+                    </div>
+                    
+                    <div id="info-screen" class="screen-content hidden">
+                        <div class="card">
+                            <div class="card-title">О терминале</div>
+                            <p class="info-text typing-effect">
+                                PurpleTerminal PRO - профессиональное решение для платежных терминалов с удобным интерфейсом и поддержкой множества услуг.
+                            </p>
+                            <p class="info-text">
+                                Версия: 3.1.0<br>
+                                Дата обновления: 28.03.2024
+                            </p>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-title">Контактные данные</div>
+                            <div class="contact-item">
+                                <div class="contact-icon">
+                                    <i class="fas fa-phone"></i>
+                                </div>
+                                <div class="contact-text">+7 (800) 123-45-67</div>
+                            </div>
+                            <div class="contact-item">
+                                <div class="contact-icon">
+                                    <i class="fas fa-envelope"></i>
+                                </div>
+                                <div class="contact-text">support@purpleterminal.ru</div>
+                            </div>
+                            <div class="contact-item">
+                                <div class="contact-icon">
+                                    <i class="fas fa-globe"></i>
+                                </div>
+                                <div class="contact-text">www.purpleterminal.ru</div>
+                            </div>
+                            <div class="contact-item">
+                                <div class="contact-icon">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                </div>
+                                <div class="contact-text">г. Москва, ул. Примерная, 123</div>
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-title">Режим работы</div>
+                            <p class="info-text">
+                                Круглосуточно, без выходных
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div id="security-screen" class="screen-content hidden">
+                        <button class="back-btn" onclick="showScreen('account-screen')">
+                            <i class="fas fa-arrow-left"></i> Назад
+                        </button>
+                        
+                        <div class="card">
+                            <div class="card-title">Безопасность</div>
+                            <p class="info-text">
+                                Настройки безопасности вашего аккаунта.
+                            </p>
+                            
+                            <button class="btn" style="width: 100%; margin-top: 20px;">
+                                <i class="fas fa-key"></i> Изменить пароль
+                            </button>
+                            
+                            <button class="btn btn-secondary" style="width: 100%; margin-top: 15px;">
+                                <i class="fas fa-fingerprint"></i> Настроить биометрию
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div id="notifications-screen" class="screen-content hidden">
+                        <button class="back-btn" onclick="showScreen('account-screen')">
+                            <i class="fas fa-arrow-left"></i> Назад
+                        </button>
+                        
+                        <div class="card">
+                            <div class="card-title">Уведомления</div>
+                            <p class="info-text">
+                                Настройте получение уведомлений о операциях.
+                            </p>
+                            
+                            <div class="service-item" style="justify-content: space-between;">
+                                <div style="display: flex; align-items: center;">
+                                    <i class="fas fa-bell" style="font-size: 24px; margin-right: 15px; color: #b388ff;"></i>
+                                    <div>Уведомления о платежах</div>
+                                </div>
+                                <label class="switch">
+                                    <input type="checkbox" checked>
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+                            
+                            <div class="service-item" style="justify-content: space-between;">
+                                <div style="display: flex; align-items: center;">
+                                    <i class="fas fa-envelope" style="font-size: 24px; margin-right: 15px; color: #b388ff;"></i>
+                                    <div>Email-уведомления</div>
+                                </div>
+                                <label class="switch">
+                                    <input type="checkbox">
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="history-screen" class="screen-content hidden">
+                        <button class="back-btn" onclick="showScreen('account-screen')">
+                            <i class="fas fa-arrow-left"></i> Назад
+                        </button>
+                        
+                        <div class="card">
+                            <div class="card-title">История операций</div>
+                            <p class="info-text">
+                                Полная история всех ваших операций за последние 3 месяца.
+                            </p>
+                            
+                            <div style="display: flex; justify-content: space-between; margin-top: 20px;">
+                                <button class="btn btn-secondary" style="flex: 1; margin-right: 10px;">
+                                    <i class="fas fa-calendar"></i> Выбрать период
+                                </button>
+                                <button class="btn btn-secondary" style="flex: 1;">
+                                    <i class="fas fa-download"></i> Экспорт
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="transaction">
+                                <div class="transaction-icon">
+                                    <i class="fas fa-mobile-alt"></i>
+                                </div>
+                                <div class="transaction-details">
+                                    <div class="transaction-title">Пополнение телефона</div>
+                                    <div class="transaction-date">Сегодня, 14:30</div>
+                                </div>
+                                <div class="transaction-amount">-500 ₽</div>
+                            </div>
+                            <div class="transaction">
+                                <div class="transaction-icon">
+                                    <i class="fas fa-wifi"></i>
+                                </div>
+                                <div class="transaction-details">
+                                    <div class="transaction-title">Интернет Дома</div>
+                                    <div class="transaction-date">Вчера, 09:15</div>
+                                </div>
+                                <div class="transaction-amount">-600 ₽</div>
+                            </div>
+                            <div class="transaction">
+                                <div class="transaction-icon">
+                                    <i class="fas fa-coins"></i>
+                                </div>
+                                <div class="transaction-details">
+                                    <div class="transaction-title">Пополнение баланса</div>
+                                    <div class="transaction-date">15 марта, 18:45</div>
+                                </div>
+                                <div class="transaction-amount">+2 000 ₽</div>
+                            </div>
+                            <div class="transaction">
+                                <div class="transaction-icon">
+                                    <i class="fas fa-shopping-cart"></i>
+                                </div>
+                                <div class="transaction-details">
+                                    <div class="transaction-title">Оплата покупки</div>
+                                    <div class="transaction-date">14 марта, 12:20</div>
+                                </div>
+                                <div class="transaction-amount">-1 250 ₽</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="keyboard-container" id="keyboard">
+        <button class="keyboard-close" onclick="hideKeyboard()">
+            <i class="fas fa-times"></i>
+        </button>
+        <div class="keyboard-row">
+            <button class="keyboard-key" data-key="1">1</button>
+            <button class="keyboard-key" data-key="2">2</button>
+            <button class="keyboard-key" data-key="3">3</button>
+            <button class="keyboard-key" data-key="4">4</button>
+            <button class="keyboard-key" data-key="5">5</button>
+            <button class="keyboard-key" data-key="6">6</button>
+            <button class="keyboard-key" data-key="7">7</button>
+            <button class="keyboard-key" data-key="8">8</button>
+            <button class="keyboard-key" data-key="9">9</button>
+            <button class="keyboard-key" data-key="0">0</button>
+        </div>
+        <div class="keyboard-row">
+            <button class="keyboard-key" data-key="q">q</button>
+            <button class="keyboard-key" data-key="w">w</button>
+            <button class="keyboard-key" data-key="e">e</button>
+            <button class="keyboard-key" data-key="r">r</button>
+            <button class="keyboard-key" data-key="t">t</button>
+            <button class="keyboard-key" data-key="y">y</button>
+            <button class="keyboard-key" data-key="u">u</button>
+            <button class="keyboard-key" data-key="i">i</button>
+            <button class="keyboard-key" data-key="o">o</button>
+            <button class="keyboard-key" data-key="p">p</button>
+        </div>
+        <div class="keyboard-row">
+            <button class="keyboard-key" data-key="a">a</button>
+            <button class="keyboard-key" data-key="s">s</button>
+            <button class="keyboard-key" data-key="d">d</button>
+            <button class="keyboard-key" data-key="f">f</button>
+            <button class="keyboard-key" data-key="g">g</button>
+            <button class="keyboard-key" data-key="h">h</button>
+            <button class="keyboard-key" data-key="j">j</button>
+            <button class="keyboard-key" data-key="k">k</button>
+            <button class="keyboard-key" data-key="l">l</button>
+            <button class="keyboard-key func" data-key="Backspace"><i class="fas fa-backspace"></i></button>
+        </div>
+        <div class="keyboard-row">
+            <button class="keyboard-key" data-key="z">z</button>
+            <button class="keyboard-key" data-key="x">x</button>
+            <button class="keyboard-key" data-key="c">c</button>
+            <button class="keyboard-key" data-key="v">v</button>
+            <button class="keyboard-key" data-key="b">b</button>
+            <button class="keyboard-key" data-key="n">n</button>
+            <button class="keyboard-key" data-key="m">m</button>
+            <button class="keyboard-key" data-key="+">+</button>
+            <button class="keyboard-key" data-key="-">-</button>
+            <button class="keyboard-key" data-key="(">(</button>
+        </div>
+        <div class="keyboard-row">
+            <button class="keyboard-key" data-key=")">)</button>
+            <button class="keyboard-key" data-key="@">@</button>
+            <button class="keyboard-key" data-key="#">#</button>
+            <button class="keyboard-key" data-key="$">$</button>
+            <button class="keyboard-key" data-key="%">%</button>
+            <button class="keyboard-key" data-key="&">&</button>
+            <button class="keyboard-key" data-key="*">*</button>
+            <button class="keyboard-key" data-key="!">!</button>
+            <button class="keyboard-key" data-key="?">?</button>
+            <button class="keyboard-key" data-key=",">,</button>
+        </div>
+        <div class="keyboard-row">
+            <button class="keyboard-key func wide" data-key="Caps"><i class="fas fa-arrow-up"></i></button>
+            <button class="keyboard-key" data-key=" "> </button>
+            <button class="keyboard-key func wide" data-key="Enter"><i class="fas fa-arrow-left"></i></button>
+        </div>
+    </div>
+
+    <script>
+        // Текущий экран
+        let currentScreen = 'main-screen';
+        let previousScreens = [];
+        let currentProvider = '';
+        let activeInputField = null;
+        let isNumericKeyboard = false;
+        let isCapsLock = false;
+        let inactivityTimer;
+        const INACTIVITY_TIMEOUT = 300000; // 5 минут
+        
+        // Инициализация
+        document.addEventListener('DOMContentLoaded', () => {
+            // Скрываем основной терминал при загрузке
+            document.getElementById('terminal').style.opacity = '0';
+            
+            // Анимация кнопок входа
+            const loginButtons = document.querySelectorAll('.login-btn');
+            loginButtons.forEach((btn, index) => {
+                setTimeout(() => {
+                    btn.style.opacity = '1';
+                    btn.style.transform = 'translateY(0)';
+                }, 300 + index * 200);
+            });
+            
+            // Запускаем таймер неактивности
+            resetInactivityTimer();
+            
+            // Отслеживаем активность пользователя
+            document.addEventListener('mousemove', resetInactivityTimer);
+            document.addEventListener('keydown', resetInactivityTimer);
+            document.addEventListener('click', resetInactivityTimer);
+            
+            // Обработчики для клавиш клавиатуры
+            const keys = document.querySelectorAll('.keyboard-key');
+            keys.forEach(key => {
+                key.addEventListener('click', () => {
+                    if (!activeInputField) return;
+                    
+                    const keyValue = key.getAttribute('data-key');
+                    const currentValue = activeInputField.value;
+                    const selectionStart = activeInputField.selectionStart;
+                    const selectionEnd = activeInputField.selectionEnd;
+                    
+                    if (keyValue === 'Backspace') {
+                        // Удаление символа
+                        if (selectionStart === selectionEnd && selectionStart > 0) {
+                            activeInputField.value = currentValue.substring(0, selectionStart - 1) + currentValue.substring(selectionStart);
+                            activeInputField.selectionStart = selectionStart - 1;
+                            activeInputField.selectionEnd = selectionStart - 1;
+                        } else if (selectionStart !== selectionEnd) {
+                            activeInputField.value = currentValue.substring(0, selectionStart) + currentValue.substring(selectionEnd);
+                            activeInputField.selectionStart = selectionStart;
+                            activeInputField.selectionEnd = selectionStart;
+                        }
+                    } else if (keyValue === 'Caps') {
+                        // Переключение Caps Lock
+                        isCapsLock = !isCapsLock;
+                        key.classList.toggle('active', isCapsLock);
+                    } else if (keyValue === 'Enter') {
+                        // Скрытие клавиатуры
+                        hideKeyboard();
+                    } else {
+                        // Вставка символа
+                        const char = isCapsLock ? keyValue.toUpperCase() : keyValue.toLowerCase();
+                        activeInputField.value = currentValue.substring(0, selectionStart) + char + currentValue.substring(selectionEnd);
+                        activeInputField.selectionStart = selectionStart + 1;
+                        activeInputField.selectionEnd = selectionStart + 1;
+                    }
+                    
+                    // Анимация нажатия
+                    key.classList.add('active');
+                    setTimeout(() => {
+                        key.classList.remove('active');
+                    }, 100);
+                });
+            });
+            
+            // Закрытие клавиатуры при клике на оверлей
+            document.getElementById('keyboard-overlay').addEventListener('click', hideKeyboard);
+        });
+        
+        // Сброс таймера неактивности
+        function resetInactivityTimer() {
+            clearTimeout(inactivityTimer);
+            inactivityTimer = setTimeout(returnToLogin, INACTIVITY_TIMEOUT);
+        }
+        
+        // Возврат к экрану входа
+        function returnToLogin() {
+            document.getElementById('login-screen').classList.remove('hidden');
+            document.getElementById('terminal').style.opacity = '0';
+        }
+        
+        // Показать экран
+        function showScreen(screenId) {
+            // Если пытаемся открыть тот же экран, ничего не делаем
+            if (screenId === currentScreen) return;
+            
+            // Добавляем текущий экран в историю
+            if (currentScreen !== 'payment-screen' && currentScreen !== 'success-screen') {
+                previousScreens.push(currentScreen);
+            }
+            
+            // Скрываем текущий экран
+            document.getElementById(currentScreen).classList.add('hidden');
+            document.getElementById(currentScreen).classList.remove('screen-content');
+            
+            // Показываем новый экран
+            document.getElementById(screenId).classList.remove('hidden');
+            document.getElementById(screenId).classList.add('screen-content');
+            
+            // Обновляем текущий экран
+            currentScreen = screenId;
+            
+            // Обновляем активную кнопку меню
+            updateMenuButtons(screenId);
+            
+            // Скрываем клавиатуру при переключении экранов
+            hideKeyboard();
+            
+            // Скрываем экран входа, если показываем основной интерфейс
+            if (screenId !== 'login-screen') {
+                document.getElementById('login-screen').classList.add('hidden');
+                document.getElementById('terminal').style.opacity = '1';
+            }
+            
+            // Сбрасываем таймер неактивности
+            resetInactivityTimer();
+        }
+        
+        // Назад из формы оплаты
+        function goBackFromPayment() {
+            if (previousScreens.length > 0) {
+                const prevScreen = previousScreens.pop();
+                showScreen(prevScreen);
+            } else {
+                showScreen('services-screen');
+            }
+        }
+        
+        // Обновить активные кнопки меню
+        function updateMenuButtons(screenId) {
+            const bannerItems = document.querySelectorAll('.banner-item');
+            bannerItems.forEach(item => item.classList.remove('active'));
+            
+            // Определяем, какая кнопка должна быть активной
+            let activeItem = null;
+            if (screenId === 'main-screen') {
+                activeItem = bannerItems[0];
+            } else if (screenId === 'services-screen' || screenId === 'mobile-screen' || 
+                      screenId === 'payment-screen' || screenId === 'success-screen') {
+                activeItem = bannerItems[1];
+            } else if (screenId === 'account-screen' || screenId === 'security-screen' || 
+                      screenId === 'notifications-screen') {
+                activeItem = bannerItems[2];
+            } else if (screenId === 'history-screen') {
+                activeItem = bannerItems[3];
+            } else if (screenId === 'info-screen') {
+                activeItem = bannerItems[4];
+            }
+            
+            if (activeItem) {
+                activeItem.classList.add('active');
+            }
+        }
+        
+        // Выбор услуги
+        function selectService(service) {
+            if (service === 'mobile') {
+                showScreen('mobile-screen');
+            } else {
+                alert(`Услуга "${getServiceName(service)}" находится в разработке`);
+            }
+        }
+        
+        // Получение названия услуги
+        function getServiceName(service) {
+            const services = {
+                'mobile': 'Мобильная связь',
+                'internet': 'Интернет и ТВ',
+                'utilities': 'ЖКХ и коммунальные',
+                'games': 'Игры и развлечения',
+                'transport': 'Транспортные карты',
+                'education': 'Образование'
+            };
+            return services[service] || service;
+        }
+        
+        // Показать форму оплаты
+        function showPaymentForm(provider) {
+            currentProvider = provider;
+            document.getElementById('provider-name').textContent = provider;
+            showScreen('payment-screen');
+        }
+        
+        // Обработка платежа
+        function processPayment() {
+            const phone = document.getElementById('phone-number').value;
+            const amount = document.getElementById('payment-amount').value;
+            
+            if (!phone || !amount) {
+                alert('Пожалуйста, заполните все поля');
+                return;
+            }
+            
+            if (parseFloat(amount) <= 0) {
+                alert('Сумма должна быть больше нуля');
+                return;
+            }
+            
+            // Показываем загрузку
+            const paymentForm = document.querySelector('.payment-form');
+            paymentForm.innerHTML = `
+                <div class="loading">
+                    <div class="loading-spinner"></div>
+                </div>
+            `;
+            
+            // Имитируем задержку обработки платежа
+            setTimeout(() => {
+                // Заполняем данные для экрана успеха
+                document.getElementById('success-service').textContent = `Пополнение ${currentProvider}`;
+                document.getElementById('success-phone').textContent = phone;
+                document.getElementById('success-amount').textContent = `${amount} ₽`;
+                
+                const now = new Date();
+                document.getElementById('success-date').textContent = 
+                    `${now.getDate()}.${now.getMonth()+1}.${now.getFullYear()} ${now.getHours()}:${now.getMinutes()}`;
+                
+                // Показываем экран успеха
+                showScreen('success-screen');
+                
+                // Очищаем историю, чтобы после успеха можно было вернуться на главную
+                previousScreens = [];
+            }, 2000);
+        }
+        
+        // Показать клавиатуру
+        function showKeyboard(inputId, numericOnly = false) {
+            activeInputField = document.getElementById(inputId);
+            isNumericKeyboard = numericOnly;
+            
+            // Настраиваем клавиатуру в зависимости от типа ввода
+            if (numericOnly) {
+                setupNumericKeyboard();
+            } else {
+                setupFullKeyboard();
+            }
+            
+            // Показываем клавиатуру
+            document.getElementById('keyboard').classList.add('visible');
+            document.getElementById('keyboard-overlay').classList.add('visible');
+            
+            // Позиционируем курсор в конец текста
+            setTimeout(() => {
+                activeInputField.focus();
+                activeInputField.selectionStart = activeInputField.value.length;
+                activeInputField.selectionEnd = activeInputField.value.length;
+            }, 100);
+        }
+        
+        // Скрыть клавиатуру
+        function hideKeyboard() {
+            document.getElementById('keyboard').classList.remove('visible');
+            document.getElementById('keyboard-overlay').classList.remove('visible');
+            activeInputField = null;
+        }
+        
+        // Настройка цифровой клавиатуры
+        function setupNumericKeyboard() {
+            const keys = document.querySelectorAll('.keyboard-key');
+            keys.forEach(key => {
+                const keyValue = key.getAttribute('data-key');
+                if (/[0-9+-\.,]/.test(keyValue) || keyValue === 'Backspace') {
+                    key.style.display = 'block';
+                } else {
+                    key.style.display = 'none';
+                }
+            });
+        }
+        
+        // Настройка полной клавиатуры
+        function setupFullKeyboard() {
+            const keys = document.querySelectorAll('.keyboard-key');
+            keys.forEach(key => {
+                key.style.display = 'block';
+            });
+        }
+    </script>
+</body>
+</html>
