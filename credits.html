@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Титры Violet</title>
+    <style>
+        @font-face {
+            font-family: 'Violet';
+            src: url('Violet.ttf') format('truetype');
+        }
+        
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #000;
+            color: #fff;
+            font-family: 'Violet', sans-serif;
+            overflow: hidden;
+            height: 100vh;
+        }
+        
+        .credits-container {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            align-items: center;
+            text-align: center;
+            transform: perspective(300px) rotateX(20deg);
+            transform-origin: 50% 100%;
+            overflow: hidden;
+        }
+        
+        .credits-content {
+            animation: scrollCredits 30s linear forwards;
+            width: 80%;
+            max-width: 800px;
+        }
+        
+        .credits-title {
+            font-size: 3.5rem;
+            margin-bottom: 2rem;
+            color: #b388ff;
+            text-shadow: 0 0 10px rgba(179, 136, 255, 0.7);
+        }
+        
+        .credits-section {
+            margin: 2rem 0;
+        }
+        
+        .credits-section-title {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            color: #b388ff;
+        }
+        
+        .credits-item {
+            font-size: 1.8rem;
+            margin: 1rem 0;
+            line-height: 1.4;
+        }
+        
+        .credits-footer {
+            margin-top: 5rem;
+            font-size: 2rem;
+            color: #b388ff;
+            padding-bottom: 100vh;
+        }
+        
+        .back-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #6a3093, #a044ff);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-family: 'Violet', sans-serif;
+            font-size: 1.2rem;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(106, 48, 147, 0.6);
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+        
+        .back-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(106, 48, 147, 0.8);
+        }
+        
+        .back-button:active {
+            transform: translateY(1px);
+        }
+        
+        @keyframes scrollCredits {
+            0% {
+                transform: translateY(100%);
+            }
+            100% {
+                transform: translateY(-100%);
+            }
+        }
+        
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+        
+        .star {
+            position: absolute;
+            background-color: #fff;
+            border-radius: 50%;
+            animation: twinkle 1s infinite alternate;
+        }
+        
+        @keyframes twinkle {
+            0% {
+                opacity: 0.2;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="stars" id="stars"></div>
+    
+    <a href="index.html" class="back-button">Вернуться в меню</a>
+    
+    <div class="credits-container">
+        <div class="credits-content">
+            <div class="credits-title">Violet Terminal</div>
+            
+            <div class="credits-section">
+                <div class="credits-section-title">Создатель</div>
+                <div class="credits-item">$-[NYA.SH]-Miqyz :3</div>
+            </div>
+            
+            <div class="credits-section">
+                <div class="credits-section-title">Разработанные части</div>
+                <div class="credits-item">• Весь интерфейс терминала</div>
+                <div class="credits-item">• Система аутентификации</div>
+                <div class="credits-item">• Платежная система</div>
+                <div class="credits-item">• Анимации и переходы</div>
+                <div class="credits-item">• Адаптивный дизайн</div>
+                <div class="credits-item">• Интерактивная клавиатура</div>
+                <div class="credits-item">• Система уведомлений</div>
+            </div>
+            
+            <div class="credits-section">
+                <div class="credits-section-title">Технологии</div>
+                <div class="credits-item">HTML5, CSS3, JavaScript</div>
+                <div class="credits-item">Шрифт Violet.ttf</div>
+                <div class="credits-item">Font Awesome иконки</div>
+                <div class="credits-item">PWA технологии</div>
+            </div>
+            
+            <div class="credits-footer">
+                Один человек может многое сделать... Violet.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Создаем звездное небо
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            const starsCount = 200;
+            
+            for (let i = 0; i < starsCount; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                
+                // Случайные размеры и позиции
+                const size = Math.random() * 3;
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.top = `${Math.random() * 100}%`;
+                
+                // Случайная задержка анимации
+                star.style.animationDelay = `${Math.random() * 2}s`;
+                
+                starsContainer.appendChild(star);
+            }
+        }
+        
+        // Запускаем создание звезд при загрузке
+        window.addEventListener('load', createStars);
+        
+        // Автоматический перезапуск титров
+        function restartCredits() {
+            const credits = document.querySelector('.credits-content');
+            credits.style.animation = 'none';
+            void credits.offsetWidth; // Trigger reflow
+            credits.style.animation = 'scrollCredits 30s linear forwards';
+        }
+        
+        // Перезапускаем титры каждые 30 секунд
+        setInterval(restartCredits, 30000);
+    </script>
+</body>
+</html>
