@@ -3,213 +3,470 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Титры Violet</title>
+    <title>Посхалко</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
-        @font-face {
-            font-family: 'Violet';
-            src: url('Violet.ttf') format('truetype');
+        :root {
+            --main-color: #ff7b25;
+            --main-dark: #1a1a1a;
+            --main-darker: #0d0d0d;
+            --text-color: #f0f0f0;
         }
         
         body {
             margin: 0;
             padding: 0;
-            background-color: #000;
-            color: #fff;
-            font-family: 'Violet', sans-serif;
-            overflow: hidden;
-            height: 100vh;
+            font-family: 'Press Start 2P', cursive;
+            background-color: var(--main-dark);
+            color: var(--text-color);
+            overflow-x: hidden;
+            user-select: none;
         }
         
-        .credits-container {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            align-items: center;
-            text-align: center;
-            transform: perspective(300px) rotateX(20deg);
-            transform-origin: 50% 100%;
-            overflow: hidden;
-        }
-        
-        .credits-content {
-            animation: scrollCredits 30s linear forwards;
-            width: 80%;
+        .container {
             max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
         }
-        
-        .credits-title {
-            font-size: 3.5rem;
-            margin-bottom: 2rem;
-            color: #b388ff;
-            text-shadow: 0 0 10px rgba(179, 136, 255, 0.7);
-        }
-        
-        .credits-section {
-            margin: 2rem 0;
-        }
-        
-        .credits-section-title {
-            font-size: 2.5rem;
-            margin-bottom: 1.5rem;
-            color: #b388ff;
-        }
-        
-        .credits-item {
-            font-size: 1.8rem;
-            margin: 1rem 0;
-            line-height: 1.4;
-        }
-        
-        .credits-footer {
-            margin-top: 5rem;
-            font-size: 2rem;
-            color: #b388ff;
-            padding-bottom: 100vh;
-        }
-        
-        .back-button {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            z-index: 100;
-            padding: 12px 24px;
-            background: linear-gradient(135deg, #6a3093, #a044ff);
-            color: white;
-            border: none;
-            border-radius: 30px;
-            font-family: 'Violet', sans-serif;
-            font-size: 1.2rem;
+
+        .home-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-color: var(--main-color);
+            color: var(--main-darker);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 1.5rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(106, 48, 147, 0.6);
-            transition: all 0.3s ease;
-            text-decoration: none;
+            box-shadow: 0 3px 10px rgba(255, 123, 37, 0.4);
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+
+        .home-button:hover {
+            transform: scale(1.1);
+        }
+
+        .hover-text {
+            position: absolute;
+            left: 60px;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: var(--main-darker);
+            color: var(--main-color);
+            padding: 5px 10px;
+            border-radius: 5px;
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+            font-size: 0.6rem;
+        }
+
+        .home-button:hover .hover-text {
+            opacity: 1;
         }
         
-        .back-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(106, 48, 147, 0.8);
+        h1 {
+            color: var(--main-color);
+            text-shadow: 0 0 10px rgba(255, 123, 37, 0.5);
+            font-size: 2.5rem;
+            margin-bottom: 30px;
         }
         
-        .back-button:active {
-            transform: translateY(1px);
+        .clicker-container {
+            position: relative;
+            margin: 50px auto;
+            width: 300px;
+            height: 300px;
         }
         
-        @keyframes scrollCredits {
-            0% {
-                transform: translateY(100%);
-            }
-            100% {
-                transform: translateY(-100%);
-            }
-        }
-        
-        .stars {
-            position: fixed;
-            top: 0;
-            left: 0;
+        .clicker {
             width: 100%;
             height: 100%;
-            z-index: -1;
-        }
-        
-        .star {
-            position: absolute;
-            background-color: #fff;
+            background-color: var(--main-darker);
             border-radius: 50%;
-            animation: twinkle 1s infinite alternate;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.7);
+            transition: transform 0.1s, box-shadow 0.3s;
+            position: relative;
+            overflow: hidden;
+            border: 3px solid var(--main-color);
         }
         
-        @keyframes twinkle {
+        .clicker:active {
+            transform: scale(0.95);
+        }
+        
+        .clicker:hover {
+            box-shadow: 0 0 40px rgba(255, 123, 37, 0.3);
+        }
+        
+        .clicker::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255,123,37,0.2) 0%, rgba(255,123,37,0) 70%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .clicker:hover::before {
+            opacity: 1;
+        }
+        
+        .clicker-text {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--main-color);
+            z-index: 1;
+        }
+        
+        .counter {
+            font-size: 2.5rem;
+            margin: 20px 0;
+            color: var(--main-color);
+            text-shadow: 0 0 10px rgba(255, 123, 37, 0.5);
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 30px 0;
+            background-color: var(--main-darker);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 1.5rem;
+            color: var(--main-color);
+            font-weight: bold;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .upgrades {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .upgrade {
+            background-color: var(--main-darker);
+            padding: 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-left: 3px solid var(--main-color);
+        }
+        
+        .upgrade:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(255, 123, 37, 0.2);
+        }
+        
+        .upgrade-name {
+            color: var(--main-color);
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .upgrade-cost {
+            color: #ff9d5c;
+            font-size: 0.9rem;
+        }
+        
+        .upgrade-effect {
+            font-size: 0.8rem;
+            opacity: 0.7;
+            margin-top: 5px;
+        }
+        
+        .click-effect {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background-color: var(--main-color);
+            border-radius: 50%;
+            pointer-events: none;
+            opacity: 0.7;
+            animation: clickAnimation 0.5s forwards;
+            z-index: 10;
+        }
+        
+        @keyframes clickAnimation {
             0% {
-                opacity: 0.2;
+                transform: scale(0.5);
+                opacity: 0.7;
             }
             100% {
+                transform: scale(2);
+                opacity: 0;
+            }
+        }
+        
+        .particle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background-color: var(--main-color);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: particleAnimation 1s forwards;
+            z-index: 5;
+        }
+        
+        @keyframes particleAnimation {
+            0% {
+                transform: translate(0, 0);
                 opacity: 1;
             }
+            100% {
+                transform: translate(var(--tx), var(--ty));
+                opacity: 0;
+            }
+        }
+        
+        .auto-clickers {
+            margin-top: 40px;
+            background-color: var(--main-darker);
+            padding: 20px;
+            border-radius: 10px;
+        }
+        
+        .auto-clicker {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            margin: 10px 0;
+            background-color: rgba(0, 0, 0, 0.3);
+            border-radius: 5px;
+        }
+        
+        .buy-btn {
+            background-color: var(--main-color);
+            color: var(--main-darker);
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .buy-btn:hover {
+            background-color: #ff9047;
+            transform: translateY(-2px);
+            box-shadow: 0 3px 10px rgba(255, 123, 37, 0.3);
+        }
+        
+        .buy-btn:disabled {
+            background-color: #555;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
         }
     </style>
 </head>
 <body>
-    <div class="stars" id="stars"></div>
+	<a href="FFP.html" class="home-button" title="Вернуться в Терминал">
+		<span class="icon">🏠</span>
+		<span class="hover-text">Вернуться в Терминал</span>
+	</a>
     
-    <a href="index.html" class="back-button">Вернуться в меню</a>
-    
-    <div class="credits-container">
-        <div class="credits-content">
-            <div class="credits-title">Violet Terminal</div>
-            
-            <div class="credits-section">
-                <div class="credits-section-title">Создатель</div>
-                <div class="credits-item">$-[NYA.SH]-Miqyz :3</div>
+    <div class="container">
+        <h1>Fyra Clicker?</h1>
+        
+        <div class="counter" id="counter">0</div>
+        
+        <div class="clicker-container">
+            <div class="clicker" id="clicker">
+                <div class="clicker-text">КЛИКАЙ!</div>
             </div>
-            
-            <div class="credits-section">
-                <div class="credits-section-title">Разработанные части</div>
-                <div class="credits-item">• Весь интерфейс терминала</div>
-                <div class="credits-item">• Система аутентификации</div>
-                <div class="credits-item">• Платежная система</div>
-                <div class="credits-item">• Анимации и переходы</div>
-                <div class="credits-item">• Адаптивный дизайн</div>
-                <div class="credits-item">• Интерактивная клавиатура</div>
-                <div class="credits-item">• Система уведомлений</div>
+        </div>
+        
+        <div class="stats">
+            <div class="stat">
+                <div class="stat-value" id="clicks-per-second">0</div>
+                <div class="stat-label">Кликов/сек</div>
             </div>
-            
-            <div class="credits-section">
-                <div class="credits-section-title">Технологии</div>
-                <div class="credits-item">HTML5, CSS3, JavaScript</div>
-                <div class="credits-item">Шрифт Violet.ttf</div>
-                <div class="credits-item">Font Awesome иконки</div>
-                <div class="credits-item">PWA технологии</div>
+            <div class="stat">
+                <div class="stat-value" id="total-clicks">0</div>
+                <div class="stat-label">Всего кликов</div>
             </div>
-            
-            <div class="credits-footer">
-                Один человек может многое сделать... Violet.
+            <div class="stat">
+                <div class="stat-value" id="click-power">1</div>
+                <div class="stat-label">Сила клика</div>
+            </div>
+        </div>
+        
+        <div class="upgrades">
+            <div class="upgrade" id="upgrade1">
+                <div class="upgrade-name">Усиленный клик</div>
+                <div class="upgrade-cost">Стоимость: 50</div>
+                <div class="upgrade-effect">+1 к силе клика</div>
+            </div>
+            <div class="upgrade" id="upgrade2">
+                <div class="upgrade-name">Двойной клик</div>
+                <div class="upgrade-cost">Стоимость: 200</div>
+                <div class="upgrade-effect">x2 к силе клика</div>
+            </div>
+            <div class="upgrade" id="upgrade3">
+                <div class="upgrade-name">Автокликер</div>
+                <div class="upgrade-cost">Стоимость: 500</div>
+                <div class="upgrade-effect">+1 клик/сек</div>
+            </div>
+            <div class="upgrade" id="upgrade4">
+                <div class="upgrade-name">Мега клик</div>
+                <div class="upgrade-cost">Стоимость: 1000</div>
+                <div class="upgrade-effect">+5 к силе клика</div>
+            </div>
+        </div>
+        
+        <div class="auto-clickers">
+            <h3>Автокликеры</h3>
+            <div class="auto-clicker">
+                <div>
+                    <div>Базовый автокликер</div>
+                    <div>Производит 1 клик/сек</div>
+                    <div>Цена: <span id="auto-clicker1-cost">100</span></div>
+                </div>
+                <button class="buy-btn" id="buy-auto-clicker1">Купить</button>
+            </div>
+            <div class="auto-clicker">
+                <div>
+                    <div>Улучшенный автокликер</div>
+                    <div>Производит 5 кликов/сек</div>
+                    <div>Цена: <span id="auto-clicker2-cost">500</span></div>
+                </div>
+                <button class="buy-btn" id="buy-auto-clicker2">Купить</button>
             </div>
         </div>
     </div>
 
     <script>
-        // Создаем звездное небо
-        function createStars() {
-            const starsContainer = document.getElementById('stars');
-            const starsCount = 200;
+        // Игровые переменные
+        let clicks = 0;
+        let clickPower = 1;
+        let clicksPerSecond = 0;
+        let totalClicks = 0;
+        
+        let autoClickers = 0;
+
+        // Элементы
+        const clicker = document.getElementById('clicker');
+        const counter = document.getElementById('counter');
+        const clickPowerDisplay = document.getElementById('click-power');
+        const totalClicksDisplay = document.getElementById('total-clicks');
+        const clicksPerSecondDisplay = document.getElementById('clicks-per-second');
+        const upgrade1 = document.getElementById('upgrade1');
+        const upgrade2 = document.getElementById('upgrade2');
+        const upgrade3 = document.getElementById('upgrade3');
+        const upgrade4 = document.getElementById('upgrade4');
+        const buyAutoClicker1 = document.getElementById('buy-auto-clicker1');
+        const buyAutoClicker2 = document.getElementById('buy-auto-clicker2');
+        
+        // Слушатели событий
+        clicker.addEventListener('click', () => {
+            clicks += clickPower;
+            totalClicks++;
+            counter.innerText = clicks;
+            totalClicksDisplay.innerText = totalClicks;
             
-            for (let i = 0; i < starsCount; i++) {
-                const star = document.createElement('div');
-                star.classList.add('star');
-                
-                // Случайные размеры и позиции
-                const size = Math.random() * 3;
-                star.style.width = `${size}px`;
-                star.style.height = `${size}px`;
-                star.style.left = `${Math.random() * 100}%`;
-                star.style.top = `${Math.random() * 100}%`;
-                
-                // Случайная задержка анимации
-                star.style.animationDelay = `${Math.random() * 2}s`;
-                
-                starsContainer.appendChild(star);
+            // Создаём визуальные эффекты
+            createClickEffect(event);
+
+            updateCounter();
+        });
+
+        buyAutoClicker1.addEventListener('click', () => {
+            if (clicks >= 100) {
+                clicks -= 100;
+                autoClickers++;
+                updateCounter();
+                buyAutoClicker1.disabled = true;
+            }
+        });
+
+        buyAutoClicker2.addEventListener('click', () => {
+            if (clicks >= 500) {
+                clicks -= 500;
+                autoClickers += 5;
+                updateCounter();
+                buyAutoClicker2.disabled = true;
+            }
+        });
+
+        // Визуальные эффекты для кликов
+        function createClickEffect(event) {
+            const clickEffect = document.createElement('div');
+            clickEffect.classList.add('click-effect');
+            clickEffect.style.left = `${event.clientX - 15}px`;
+            clickEffect.style.top = `${event.clientY - 15}px`;
+            document.body.appendChild(clickEffect);
+            
+            // Удаляем эффект по завершению анимации
+            setTimeout(() => {
+                clickEffect.remove();
+            }, 500);
+        }
+
+        // Обновляем данные на экране
+        function updateCounter() {
+            clickPowerDisplay.innerText = clickPower;
+            clicksPerSecondDisplay.innerText = autoClickers;
+            localStorage.setItem('clicks', clicks);
+            localStorage.setItem('totalClicks', totalClicks);
+            localStorage.setItem('clickPower', clickPower);
+            localStorage.setItem('autoClickers', autoClickers);
+        }
+
+        // Сохраняем и загружаем прогресс
+        function saveProgress() {
+            const saveData = {
+                clicks,
+                clickPower,
+                totalClicks,
+                autoClickers
+            };
+            localStorage.setItem('orangeClickerSave', JSON.stringify(saveData));
+        }
+
+        function loadProgress() {
+            const saveData = localStorage.getItem('orangeClickerSave');
+            if (saveData) {
+                const data = JSON.parse(saveData);
+                clicks = data.clicks || 0;
+                clickPower = data.clickPower || 1;
+                totalClicks = data.totalClicks || 0;
+                autoClickers = data.autoClickers || 0;
+                updateCounter();
             }
         }
-        
-        // Запускаем создание звезд при загрузке
-        window.addEventListener('load', createStars);
-        
-        // Автоматический перезапуск титров
-        function restartCredits() {
-            const credits = document.querySelector('.credits-content');
-            credits.style.animation = 'none';
-            void credits.offsetWidth; // Trigger reflow
-            credits.style.animation = 'scrollCredits 30s linear forwards';
-        }
-        
-        // Перезапускаем титры каждые 30 секунд
-        setInterval(restartCredits, 30000);
+
+        setInterval(saveProgress, 5000);
+        loadProgress();
     </script>
 </body>
 </html>
