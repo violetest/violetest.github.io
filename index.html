@@ -5,20 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Violet | Wallet</title>
+    <title>Fyra Fast Pay</title>
     <style>
         @font-face {
-            font-family: 'Violet';
-            src: url('Violet.ttf') format('truetype');
+            font-family: 'SF Pro Display';
+            src: url('https://fonts.cdnfonts.com/css/sf-pro-display') format('truetype');
+            font-weight: bold;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Violet', 'Arial', sans-serif;
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
             user-select: none;
             -webkit-tap-highlight-color: transparent;
+            font-weight: bold;
         }
 
         body {
@@ -30,16 +32,27 @@
             overflow: hidden;
             color: #e0e0e0;
             touch-action: manipulation;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body.light-theme {
+            background-color: #f5f5f5;
+            color: #333;
         }
 
         .terminal {
             width: 100%;
             height: 100%;
-            background: linear-gradient(145deg, #1e1e2f, #2a2a3a);
+            background: #1a1a1a;
             overflow: hidden;
             position: fixed;
             display: flex;
             flex-direction: column;
+            transition: background 0.3s;
+        }
+
+        body.light-theme .terminal {
+            background: #f5f5f5;
         }
 
         .content-panel {
@@ -50,17 +63,22 @@
         }
 
         .header {
-            background: linear-gradient(90deg, #6a3093, #a044ff);
+            background: #ff8c00;
             padding: 12px 15px;
             color: white;
             font-weight: bold;
             font-size: 18px;
-            box-shadow: 0 5px 15px rgba(106, 48, 147, 0.6);
+            box-shadow: 0 5px 15px rgba(255, 140, 0, 0.6);
             display: flex;
             justify-content: space-between;
             align-items: center;
             position: relative;
             z-index: 10;
+        }
+
+        body.light-theme .header {
+            background: #ff8c00;
+            box-shadow: 0 5px 15px rgba(255, 140, 0, 0.4);
         }
 
         .datetime {
@@ -105,13 +123,17 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: linear-gradient(145deg, #1e1e2f, #2a2a3a);
+            background: #1a1a1a;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             z-index: 1000;
             transition: all 0.5s;
+        }
+
+        body.light-theme .login-screen {
+            background: #f5f5f5;
         }
 
         .login-screen.hidden {
@@ -123,7 +145,7 @@
         .login-title {
             font-size: 24px;
             margin-bottom: 30px;
-            color: #b388ff;
+            color: #ff8c00;
             text-align: center;
         }
 
@@ -136,7 +158,7 @@
         }
 
         .login-btn {
-            background: linear-gradient(90deg, #6a3093, #a044ff);
+            background: #ff8c00;
             color: white;
             border: none;
             padding: 16px;
@@ -144,12 +166,16 @@
             font-size: 18px;
             cursor: pointer;
             transition: all 0.3s;
-            box-shadow: 0 6px 12px rgba(106, 48, 147, 0.4);
+            box-shadow: 0 6px 12px rgba(255, 140, 0, 0.4);
             display: flex;
             justify-content: center;
             align-items: center;
-            opacity: 0;
-            transform: translateY(20px);
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        body.light-theme .login-btn {
+            box-shadow: 0 6px 12px rgba(255, 140, 0, 0.3);
         }
 
         .login-btn i {
@@ -158,7 +184,7 @@
         }
 
         .btn {
-            background: linear-gradient(90deg, #6a3093, #a044ff);
+            background: #ff8c00;
             color: white;
             border: none;
             padding: 14px 20px;
@@ -166,14 +192,18 @@
             font-size: 18px;
             cursor: pointer;
             transition: all 0.3s;
-            box-shadow: 0 6px 12px rgba(106, 48, 147, 0.4);
+            box-shadow: 0 6px 12px rgba(255, 140, 0, 0.4);
             margin: 8px 0;
             width: 100%;
         }
 
+        body.light-theme .btn {
+            box-shadow: 0 6px 12px rgba(255, 140, 0, 0.3);
+        }
+
         .btn-back {
-            background: #3a3a4a;
-            color: #b388ff;
+            background: #333;
+            color: #ff8c00;
             border: none;
             padding: 10px 15px;
             border-radius: 20px;
@@ -186,13 +216,19 @@
             margin-bottom: 15px;
         }
 
+        body.light-theme .btn-back {
+            background: #e0e0e0;
+            color: #ff6b00;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
         .btn-back i {
             margin-right: 8px;
         }
 
         .input-field {
-            background-color: #2a2a3a;
-            border: 2px solid #3a3a4a;
+            background-color: #2a2a2a;
+            border: 2px solid #3a3a3a;
             border-radius: 12px;
             padding: 14px 16px;
             color: white;
@@ -202,34 +238,54 @@
             transition: all 0.3s;
         }
 
+        body.light-theme .input-field {
+            background-color: #fff;
+            border: 2px solid #ddd;
+            color: #333;
+        }
+
         .search-input {
             margin-bottom: 15px;
         }
 
         .card {
-            background-color: #2a2a3a;
+            background-color: #2a2a2a;
             border-radius: 16px;
             padding: 18px;
             margin-bottom: 18px;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-            border: 2px solid #3a3a4a;
+            border: 2px solid #3a3a3a;
             transition: all 0.3s;
         }
 
+        body.light-theme .card {
+            background-color: #fff;
+            border: 2px solid #ddd;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
         .card-title {
-            color: #b388ff;
+            color: #ff8c00;
             margin-bottom: 16px;
             font-size: 20px;
             font-weight: bold;
+        }
+
+        body.light-theme .card-title {
+            color: #ff6b00;
         }
 
         .service-item {
             display: flex;
             align-items: center;
             padding: 12px 0;
-            border-bottom: 2px solid #3a3a4a;
+            border-bottom: 2px solid #3a3a3a;
             cursor: pointer;
             transition: all 0.2s;
+        }
+
+        body.light-theme .service-item {
+            border-bottom: 2px solid #ddd;
         }
 
         .service-item:last-child {
@@ -239,7 +295,7 @@
         .service-icon {
             width: 50px;
             height: 50px;
-            background-color: #6a3093;
+            background-color: #ff8c00;
             border-radius: 50%;
             display: flex;
             justify-content: center;
@@ -249,20 +305,28 @@
             font-size: 20px;
         }
 
+        body.light-theme .service-icon {
+            background-color: #ff6b00;
+        }
+
         .service-name {
             flex-grow: 1;
             font-size: 18px;
         }
 
         .service-arrow {
-            color: #b388ff;
+            color: #ff8c00;
             font-size: 22px;
+        }
+
+        body.light-theme .service-arrow {
+            color: #ff6b00;
         }
 
         .user-avatar {
             width: 100px;
             height: 100px;
-            background: linear-gradient(135deg, #6a3093, #a044ff);
+            background: #ff8c00;
             border-radius: 50%;
             margin: 0 auto 24px;
             display: flex;
@@ -271,16 +335,16 @@
             color: white;
             font-size: 36px;
             font-weight: bold;
-            box-shadow: 0 8px 20px rgba(106, 48, 147, 0.5);
+            box-shadow: 0 8px 20px rgba(255, 140, 0, 0.5);
         }
 
         .balance {
-            background: linear-gradient(90deg, #6a3093, #a044ff);
+            background: #ff8c00;
             padding: 16px;
             border-radius: 12px;
             text-align: center;
             margin-bottom: 24px;
-            box-shadow: 0 8px 20px rgba(106, 48, 147, 0.4);
+            box-shadow: 0 8px 20px rgba(255, 140, 0, 0.4);
         }
 
         .balance-label {
@@ -298,7 +362,11 @@
             display: flex;
             align-items: center;
             padding: 12px 0;
-            border-bottom: 2px solid #3a3a4a;
+            border-bottom: 2px solid #3a3a3a;
+        }
+
+        body.light-theme .transaction {
+            border-bottom: 2px solid #ddd;
         }
 
         .transaction:last-child {
@@ -308,14 +376,19 @@
         .transaction-icon {
             width: 50px;
             height: 50px;
-            background-color: #3a3a4a;
+            background-color: #3a3a3a;
             border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
             margin-right: 16px;
-            color: #b388ff;
+            color: #ff8c00;
             font-size: 20px;
+        }
+
+        body.light-theme .transaction-icon {
+            background-color: #e0e0e0;
+            color: #ff6b00;
         }
 
         .transaction-details {
@@ -349,13 +422,17 @@
         .back-btn {
             background: none;
             border: none;
-            color: #b388ff;
+            color: #ff8c00;
             font-size: 18px;
             cursor: pointer;
             margin-bottom: 16px;
             display: flex;
             align-items: center;
             padding: 8px;
+        }
+
+        body.light-theme .back-btn {
+            color: #ff6b00;
         }
 
         .payment-success {
@@ -367,7 +444,7 @@
         .success-icon {
             width: 100px;
             height: 100px;
-            background: linear-gradient(135deg, #4caf50, #8bc34a);
+            background: #4caf50;
             border-radius: 50%;
             margin: 0 auto 24px;
             display: flex;
@@ -388,8 +465,8 @@
             display: flex;
             justify-content: space-around;
             padding: 10px 0;
-            background-color: #252538;
-            border-top: 2px solid #3a3a4a;
+            background-color: #252525;
+            border-top: 2px solid #3a3a3a;
             position: fixed;
             bottom: 0;
             left: 0;
@@ -397,10 +474,15 @@
             z-index: 50;
         }
 
+        body.light-theme .mobile-menu {
+            background-color: #f0f0f0;
+            border-top: 2px solid #ddd;
+        }
+
         .mobile-menu-btn {
             background: none;
             border: none;
-            color: #b388ff;
+            color: #ff8c00;
             font-size: 12px;
             cursor: pointer;
             padding: 8px;
@@ -413,6 +495,10 @@
             text-align: center;
         }
 
+        body.light-theme .mobile-menu-btn {
+            color: #ff6b00;
+        }
+
         .mobile-menu-btn i {
             font-size: 20px;
             margin-bottom: 4px;
@@ -421,6 +507,10 @@
         .mobile-menu-btn.active {
             color: white;
             transform: translateY(-3px);
+        }
+
+        body.light-theme .mobile-menu-btn.active {
+            color: #fff;
         }
 
         .click-message {
@@ -446,10 +536,10 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
-            background: linear-gradient(90deg, #6a3093, #a044ff);
+            background: #ff8c00;
             border-radius: 16px;
             padding: 15px;
-            box-shadow: 0 8px 20px rgba(106, 48, 147, 0.4);
+            box-shadow: 0 8px 20px rgba(255, 140, 0, 0.4);
         }
 
         .banner-logo {
@@ -486,17 +576,18 @@
             bottom: 0;
             left: 0;
             right: 0;
-            background: #2a2a3a;
+            background: #2a2a2a;
             padding: 10px;
-            border-top: 2px solid #3a3a4a;
+            border-top: 2px solid #3a3a3a;
             box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.5);
             z-index: 100;
             transform: translateY(100%);
             transition: transform 0.3s ease-out;
         }
 
-        .keyboard-container.visible {
-            transform: translateY(0);
+        body.light-theme .keyboard-container {
+            background: #f0f0f0;
+            border-top: 2px solid #ddd;
         }
 
         .keyboard-row {
@@ -506,7 +597,7 @@
         }
 
         .keyboard-key {
-            background: #3a3a4a;
+            background: #3a3a3a;
             border: none;
             border-radius: 8px;
             color: white;
@@ -521,6 +612,11 @@
             align-items: center;
         }
 
+        body.light-theme .keyboard-key {
+            background: #ddd;
+            color: #333;
+        }
+
         .keyboard-key.wide {
             flex: 2;
         }
@@ -530,15 +626,27 @@
         }
 
         .keyboard-key.func {
-            background: #6a3093;
+            background: #ff8c00;
+        }
+
+        body.light-theme .keyboard-key.func {
+            background: #ff6b00;
         }
 
         .keyboard-key:hover {
-            background: #4a4a5a;
+            background: #4a4a4a;
+        }
+
+        body.light-theme .keyboard-key:hover {
+            background: #ccc;
         }
 
         .keyboard-key.func:hover {
-            background: #7a40a3;
+            background: #ff9e20;
+        }
+
+        body.light-theme .keyboard-key.func:hover {
+            background: #ff7b00;
         }
 
         .keyboard-close {
@@ -547,9 +655,13 @@
             right: 5px;
             background: none;
             border: none;
-            color: #b388ff;
+            color: #ff8c00;
             font-size: 20px;
             cursor: pointer;
+        }
+
+        body.light-theme .keyboard-close {
+            color: #ff6b00;
         }
 
         /* iOS PWA стили */
@@ -594,8 +706,8 @@
         .loading-spinner {
             width: 40px;
             height: 40px;
-            border: 4px solid rgba(106, 48, 147, 0.2);
-            border-top: 4px solid #a044ff;
+            border: 4px solid rgba(255, 140, 0, 0.2);
+            border-top: 4px solid #ff6b00;
             border-radius: 50%;
             animation: spin 1s linear infinite;
             margin: 20px auto;
@@ -604,6 +716,239 @@
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
+        }
+
+        .theme-switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 30px;
+            margin: 10px 0;
+        }
+
+        .theme-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #3a3a3a;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        body.light-theme .slider {
+            background-color: #ddd;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 22px;
+            width: 22px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: #ff8c00;
+        }
+
+        body.light-theme input:checked + .slider {
+            background-color: #ff6b00;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(30px);
+        }
+
+        .slider-icon {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            color: white;
+            font-size: 14px;
+        }
+
+        .sun-icon {
+            left: 8px;
+        }
+
+        .moon-icon {
+            right: 8px;
+        }
+        
+        /* Стили для формы входа */
+        .login-form {
+            width: 80%;
+            max-width: 300px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .login-input {
+            background-color: #2a2a2a;
+            border: 2px solid #3a3a3a;
+            border-radius: 12px;
+            padding: 14px 16px;
+            color: white;
+            font-size: 18px;
+            width: 100%;
+            margin-bottom: 5px;
+            transition: all 0.3s;
+        }
+        
+        body.light-theme .login-input {
+            background-color: #fff;
+            border: 2px solid #ddd;
+            color: #333;
+        }
+        
+        .login-submit {
+            background: #ff8c00;
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 25px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 6px 12px rgba(255, 140, 0, 0.4);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .login-error {
+            color: #ff4444;
+            text-align: center;
+            margin-top: 10px;
+            font-size: 14px;
+            display: none;
+        }
+        
+        /* Новые стили для SBP */
+        .payment-method {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .payment-method-btn {
+            background: #333;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 12px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+        }
+        
+        .payment-method-btn i {
+            margin-right: 10px;
+            font-size: 20px;
+        }
+        
+        .payment-method-btn.active {
+            background: #ff8c00;
+        }
+        
+        .sbp-form {
+            display: none;
+        }
+        
+        .sbp-form.active {
+            display: block;
+        }
+        
+        .cash-form {
+            display: none;
+        }
+        
+        .cash-form.active {
+            display: block;
+        }
+        
+        .qr-code {
+            width: 200px;
+            height: 200px;
+            margin: 20px auto;
+            background: white;
+            padding: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .qr-code img {
+            max-width: 100%;
+            max-height: 100%;
+        }
+        
+        .sbp-info {
+            background: #333;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+        }
+        
+        .sbp-banks {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .sbp-bank {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #3a3a3a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        /* Стили для входа через email/пароль */
+        .auth-tabs {
+            display: flex;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #3a3a3a;
+        }
+        
+        .auth-tab {
+            padding: 10px 15px;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s;
+        }
+        
+        .auth-tab.active {
+            border-bottom: 2px solid #ff8c00;
+            color: #ff8c00;
+        }
+        
+        .auth-form {
+            display: none;
+        }
+        
+        .auth-form.active {
+            display: block;
         }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -683,24 +1028,50 @@
     </div>
 
     <div class="login-screen" id="login-screen">
-        <div class="login-title">Violet | Wallet</div>
-        <div class="login-buttons" id="login-buttons">
-            <button class="login-btn" onclick="showScreen('services-screen')">
-                <i class="fas fa-list"></i> Услуги
-            </button>
-            <button class="login-btn" onclick="showScreen('account-screen')">
-                <i class="fas fa-user"></i> Кабинет
-            </button>
-            <button class="login-btn" onclick="showScreen('info-screen')">
-                <i class="fas fa-info-circle"></i> Инфо
-            </button>
+        <div class="login-title">Fyra Pay | Самые Быстрые Переводы В РФ</div>
+        
+        <div class="auth-tabs">
+            <div class="auth-tab active" onclick="switchAuthTab('telegram')">Telegram</div>
+            <div class="auth-tab" onclick="switchAuthTab('email')">Email</div>
+            <div class="auth-tab" onclick="switchAuthTab('phone')">Телефон</div>
+        </div>
+        
+        <div class="auth-form active" id="telegram-auth">
+            <div class="login-form">
+                <input type="text" class="login-input" placeholder="Telegram ID" id="telegram-id" onclick="showKeyboard('telegram-id', true)">
+                <button class="login-submit" onclick="loginWithTelegram()">
+                    <i class="fas fa-sign-in-alt"></i> Войти
+                </button>
+                <div class="login-error" id="telegram-error">Неверный Telegram ID</div>
+            </div>
+        </div>
+        
+        <div class="auth-form" id="email-auth">
+            <div class="login-form">
+                <input type="text" class="login-input" placeholder="Email" id="email" onclick="showKeyboard('email')">
+                <input type="password" class="login-input" placeholder="Пароль" id="password" onclick="showKeyboard('password')">
+                <button class="login-submit" onclick="loginWithEmail()">
+                    <i class="fas fa-sign-in-alt"></i> Войти
+                </button>
+                <div class="login-error" id="email-error">Неверный email или пароль</div>
+            </div>
+        </div>
+        
+        <div class="auth-form" id="phone-auth">
+            <div class="login-form">
+                <input type="tel" class="login-input" placeholder="Номер телефона" id="phone" onclick="showKeyboard('phone', true)">
+                <button class="login-submit" onclick="loginWithPhone()">
+                    <i class="fas fa-sign-in-alt"></i> Получить код
+                </button>
+                <div class="login-error" id="phone-error">Неверный номер телефона</div>
+            </div>
         </div>
     </div>
 
     <div class="terminal" id="terminal">
         <div class="content-panel">
             <div class="header">
-                <div>Violet | Wallet</div>
+                <div>Fyra Pay | Wallet</div>
                 <div class="datetime" id="datetime">28.03.2024 14:30</div>
             </div>
             
@@ -708,7 +1079,7 @@
                 <div class="screen">
                     <div id="main-screen" class="screen-content">
                         <div class="banner">
-                            <img src="logo.png" alt="PurpleTerminal" class="banner-logo">
+                            <img src="logo.png" alt="QiwiFAN" class="banner-logo">
                             <div class="banner-buttons">
                                 <button class="banner-btn"><i class="fas fa-bell"></i></button>
                                 <button class="banner-btn"><i class="fas fa-qrcode"></i></button>
@@ -716,13 +1087,13 @@
                             </div>
                         </div>
                         
-                        <div class="user-avatar">AK</div>
-                        <div class="user-name">Алексей К.</div>
-                        <div class="user-phone">+7 (912) 345-67-89</div>
+                        <div class="user-avatar" id="user-avatar">???</div>
+                        <div class="user-name" id="user-name">???</div>
+                        <div class="user-phone" id="user-phone">+7 (999) 999-99-99</div>
                         
                         <div class="balance">
                             <div class="balance-label">Баланс</div>
-                            <div class="balance-amount">5 428 ₽</div>
+                            <div class="balance-amount" id="user-balance">100 000 ₽</div>
                         </div>
                         
                         <div class="card">
@@ -747,6 +1118,17 @@
                                 </div>
                                 <div class="transaction-amount">-600 ₽</div>
                             </div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-title">Настройки темы</div>
+                            <label class="theme-switch">
+                                <input type="checkbox" id="theme-toggle" onchange="toggleTheme()">
+                                <span class="slider">
+                                    <i class="fas fa-sun slider-icon sun-icon"></i>
+                                    <i class="fas fa-moon slider-icon moon-icon"></i>
+                                </span>
+                            </label>
                         </div>
                         
                         <button class="btn" onclick="showScreen('services-screen')">
@@ -1011,6 +1393,47 @@
                                 
                                 <input type="number" class="input-field" placeholder="Сумма (руб)" id="payment-amount" onclick="showKeyboard('payment-amount', true)">
                                 
+                                <div class="payment-method">
+                                    <div class="card-title">Способ оплаты</div>
+                                    <button class="payment-method-btn active" onclick="selectPaymentMethod('sbp')">
+                                        <i class="fas fa-mobile-alt"></i> СБП (Система быстрых платежей)
+                                    </button>
+                                    <button class="payment-method-btn" onclick="selectPaymentMethod('cash')">
+                                        <i class="fas fa-money-bill-wave"></i> Наличные
+                                    </button>
+                                </div>
+                                
+                                <div class="sbp-form active" id="sbp-form">
+                                    <div class="sbp-info">
+                                        Для оплаты через СБП отправьте указанную сумму на номер:<br>
+                                        <strong>+7 (999) 123-45-67</strong><br>
+                                        В комментарии укажите: <strong>Пополнение Fyra Pay</strong>
+                                    </div>
+                                    
+                                    <div class="qr-code">
+                                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=SBP:+79991234567;amount=1000;comment=QiwiFAN" alt="QR код для оплаты">
+                                    </div>
+                                    
+                                    <div class="sbp-banks">
+                                        <div class="sbp-bank"><i class="fas fa-university"></i></div>
+                                        <div class="sbp-bank"><i class="fas fa-piggy-bank"></i></div>
+                                        <div class="sbp-bank"><i class="fas fa-credit-card"></i></div>
+                                        <div class="sbp-bank"><i class="fas fa-landmark"></i></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="cash-form" id="cash-form">
+                                    <div class="sbp-info">
+                                        Не Найден Купюро приёмник!
+                                    </div>
+                                    
+                                    <input type="text" class="input-field" placeholder="Номер квитанции" id="receipt-number" onclick="showKeyboard('receipt-number', true)">
+                                    
+                                    <button class="btn" onclick="checkCashPayment()">
+                                        <i class="fas fa-check"></i> Проверить оплату
+                                    </button>
+                                </div>
+                                
                                 <button class="btn" onclick="processPayment()">
                                     <i class="fas fa-paper-plane"></i> Оплатить
                                 </button>
@@ -1052,13 +1475,13 @@
                     </div>
                     
                     <div id="account-screen" class="screen-content hidden">
-                        <div class="user-avatar">AK</div>
-                        <div class="user-name">Алексей К.</div>
-                        <div class="user-phone">+7 (912) 345-67-89</div>
+                        <div class="user-avatar" id="account-avatar">AK</div>
+                        <div class="user-name" id="account-name">Алексей К.</div>
+                        <div class="user-phone" id="account-phone">+7 (912) 345-67-89</div>
                         
                         <div class="balance">
                             <div class="balance-label">Баланс</div>
-                            <div class="balance-amount">5 428 ₽</div>
+                            <div class="balance-amount" id="account-balance">5 428 ₽</div>
                         </div>
                         
                         <div class="card">
@@ -1172,13 +1595,13 @@
                         </button>
                         
                         <div class="card">
-                            <div class="card-title">О терминале</div>
+                            <div class="card-title">О приложении</div>
                             <p style="margin-bottom: 15px;">
-                                Violet - лучший кошелёк в 2025 Году! Эхх Киви как же нам без тебя...
+                               Fyra Pay | №1 В России
                             </p>
                             <p>
-                                Версия: 1.0<br>
-                                Дата обновления: 28.03.2025
+                                Версия: 1.1<br>
+                                Дата обновления: 28.04.2025
                             </p>
                         </div>
                         
@@ -1194,7 +1617,13 @@
                                 <div class="service-icon">
                                     <i class="fas fa-envelope"></i>
                                 </div>
-                                <div class="service-name">support@violetnew.ru</div>
+                                <div class="service-name">support@getfyra.com</div>
+                            </div>
+							    <div class="service-item">
+                                <div class="service-icon">
+                                    <i class="fa-brands fa-telegram"></i>
+                                </div>
+                                <div class="service-name">@FyraPay</div>
                             </div>
                         </div>
                     </div>
@@ -1214,6 +1643,10 @@
                     <i class="fas fa-user"></i>
                     Кабинет
                 </button>
+				<button class="mobile-menu-btn" onclick="showScreen('info-screen')">
+                    <i class="fa-solid fa-info"></i>
+                    Информация
+                </button>
             </div>
         </div>
     </div>
@@ -1232,20 +1665,1037 @@
         let activeInputField = null;
         let isNumericKeyboard = false;
         let isCapsLock = false;
+        let currentUser = null;
+        let currentPaymentMethod = 'sbp';
+        
+        // Данные пользователей (имитация базы данных)
+        const usersData = {
+			    "6741968485": {
+				"username": "c00ns0l3",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "1",
+				"recipient_id": "5527383761",
+				"temp_recipient": "5527383761"
+			},
+			"5527383761": {
+				"username": "Kotov_Sotov",
+				"balance": 0,
+				"unique_id": "2",
+				"recipient_id": "5527383761"
+			},
+			"6937695975": {
+				"username": "miqyz",
+				"balance": 10.0,
+				"banned": false,
+				"unique_id": "4",
+				"temp_recipient": "6741968485"
+			},
+			"5256352942": {
+				"username": null,
+				"balance": 0,
+				"banned": false,
+				"unique_id": "5",
+				"recipient_id": "1107900246"
+			},
+			"6033730392": {
+				"username": "MilkAnd_Cookies",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "5",
+				"recipient_id": "5256352942"
+			},
+			"7809363780": {
+				"username": "arbyz1331",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "6",
+				"recipient_id": "1664592478"
+			},
+			"5223823960": {
+				"username": "Onne19",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "7"
+			},
+			"5084689929": {
+				"username": "GGofk",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "8"
+			},
+			"7591099839": {
+				"username": null,
+				"balance": 0,
+				"banned": false,
+				"unique_id": "9",
+				"recipient_id": "5527383761"
+			},
+			"7042310455": {
+				"username": "IntelCore13900kf",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "10"
+			},
+			"5301377325": {
+				"username": "vlva14713",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "11"
+			},
+			"6792278190": {
+				"username": "quwikoshelek",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "12",
+				"recipient_id": "6741968485"
+			},
+			"7988304068": {
+				"username": "neverhelp",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "13"
+			},
+			"1664592478": {
+				"username": "Lainory",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "14"
+			},
+			"1107900246": {
+				"username": "HjtReg",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "15",
+				"recipient_id": "6741968485"
+			},
+			"5019960990": {
+				"username": null,
+				"balance": 0,
+				"banned": false,
+				"unique_id": "18"
+			},
+			"1804377036": {
+				"username": "zarmeckiy",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "19"
+			},
+			"6254766110": {
+				"username": "duckyfan",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "20",
+				"recipient_id": "6741968485"
+			},
+			"6508787260": {
+				"username": "QIWITELE2",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "21"
+			},
+			"8183044696": {
+				"username": "Vipo31",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "22"
+			},
+			"6175510232": {
+				"username": "Ssb2ivideoorig",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "23"
+			},
+			"5411047393": {
+				"username": "SilverusGhost",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "24"
+			},
+			"7929907246": {
+				"username": null,
+				"balance": 0,
+				"banned": true,
+				"unique_id": "25",
+				"recipient_id": "6741968485"
+			},
+			"1747620698": {
+				"username": "Lavinium",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "26"
+			},
+			"8095892929": {
+				"username": "Gristcacah",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "27"
+			},
+			"6244300381": {
+				"username": "HOCOK9189",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "28"
+			},
+			"6808839509": {
+				"username": "Redmiksc",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "29",
+				"recipient_id": "5223823960"
+			},
+			"7693711896": {
+				"username": "Kivi_businessman",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "30"
+			},
+			"1950457709": {
+				"username": "PuroChanged",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "31"
+			},
+			"1903913134": {
+				"username": null,
+				"balance": 0,
+				"banned": false,
+				"unique_id": "33"
+			},
+			"7409841895": {
+				"username": "dimasiksssssssk",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "34"
+			},
+			"7937280860": {
+				"username": null,
+				"balance": 0,
+				"banned": false,
+				"unique_id": "35"
+			},
+			"6631446879": {
+				"username": "Kornishon238",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "36"
+			},
+			"8089181468": {
+				"username": "jallowz",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "38"
+			},
+			"6096362280": {
+				"username": "Unbrokensocitey",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "39",
+				"recipient_id": "8183044696",
+				"temp_recipient": "5527383761"
+			},
+			"5850983613": {
+				"username": "tmmwer11",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "40"
+			},
+			"6558325646": {
+				"username": "MHE_HOPM228",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "41"
+			},
+			"6985920993": {
+				"username": "Lishaivanov123",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "42"
+			},
+			"5989168429": {
+				"username": "YaNenaviguSOFU",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "43"
+			},
+			"6774096971": {
+				"username": "bliya1488",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "44"
+			},
+			"6674072248": {
+				"username": "Jabuhka",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "45"
+			},
+			"5277819403": {
+				"username": "itzk0tleta04",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "46"
+			},
+			"7277786058": {
+				"username": "BOBLOX_tex_poddershka",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "89"
+			},
+			"1342360109": {
+				"username": "sharov_520_techtok",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "48"
+			},
+			"7450551582": {
+				"username": "coolyou333",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "49"
+			},
+			"7600896955": {
+				"username": "wellburg",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "50"
+			},
+			"5512066852": {
+				"username": "Freez1xTech",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "51"
+			},
+			"7811245103": {
+				"username": "Mihailgggg",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "52"
+			},
+			"7745494096": {
+				"username": "xxxdress",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "53",
+				"recipient_id": "7811245103"
+			},
+			"7901094609": {
+				"username": "kototiks",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "54"
+			},
+			"7274020944": {
+				"username": null,
+				"balance": 0,
+				"banned": false,
+				"unique_id": "56"
+			},
+			"6322440228": {
+				"username": "artemchik1339",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "57"
+			},
+			"2037380827": {
+				"username": "AndrewAL225",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "58"
+			},
+			"5645655137": {
+				"username": "UnknownUser_456",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "59",
+				"recipient_id": "6741968485"
+			},
+			"2007958428": {
+				"username": "markizunkot",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "60"
+			},
+			"7218919680": {
+				"username": "vevgrew52",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "61"
+			},
+			"5038410456": {
+				"username": "Yanshin_Kirill",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "62"
+			},
+			"1654729324": {
+				"username": "hioxxi",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "63"
+			},
+			"6924231533": {
+				"username": "thalodyy",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "64"
+			},
+			"7451061064": {
+				"username": "SOBKA_SUS",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "23"
+			},
+			"8118609324": {
+				"username": "Kotzvedza",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "24"
+			},
+			"7247655492": {
+				"username": "Tumikloxbebebe",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "25"
+			},
+			"7688334933": {
+				"username": "pipiskinpro",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "26",
+				"temp_recipient": "7042310455"
+			},
+			"1230236499": {
+				"username": "pmerrs",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "27"
+			},
+			"7840239560": {
+				"username": "egortes",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "28"
+			},
+			"1867175989": {
+				"username": "DenisHavilo",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "29"
+			},
+			"7901032643": {
+				"username": "sky_angeI",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "30"
+			},
+			"1487911331": {
+				"username": "SUDO_rm_FR",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "31"
+			},
+			"5237068348": {
+				"username": "Cisql",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "32"
+			},
+			"6989523293": {
+				"username": "Ononimniy",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "33"
+			},
+			"1250073131": {
+				"username": "qupetman",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "34"
+			},
+			"6625416796": {
+				"username": "T2x220",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "35"
+			},
+			"7609543529": {
+				"username": "komurr1338",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "36"
+			},
+			"6705056570": {
+				"username": "olezexp",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "37"
+			},
+			"5273158695": {
+				"username": "Defliko",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "38"
+			},
+			"7820717501": {
+				"username": "mech3niy",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "39"
+			},
+			"6716925227": {
+				"username": "kaktuspro819",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "40"
+			},
+			"1054338147": {
+				"username": "glarden",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "41"
+			},
+			"1393849804": {
+				"username": "jekaring",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "42"
+			},
+			"6434225145": {
+				"username": "roskamnodsor",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "43"
+			},
+			"5786231750": {
+				"username": "AeroTech8787",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "44"
+			},
+			"7940176221": {
+				"username": "linuxdevtux",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "45"
+			},
+			"7657583910": {
+				"username": "sh0taboy",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "46"
+			},
+			"5715442592": {
+				"username": "udu57",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "47"
+			},
+			"2047205079": {
+				"username": "terehovns",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "48"
+			},
+			"6416818443": {
+				"username": "pixtulka",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "49"
+			},
+			"5537656725": {
+				"username": "portfeliev",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "50"
+			},
+			"6637101245": {
+				"username": "Kivi_lelele",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "51"
+			},
+			"5325423634": {
+				"username": "dimar_RU",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "52"
+			},
+			"5516432304": {
+				"username": "Krokodilo1",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "53"
+			},
+			"1687242952": {
+				"username": "pumadesigner",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "54"
+			},
+			"6280851934": {
+				"username": null,
+				"balance": 0,
+				"banned": false,
+				"unique_id": "55"
+			},
+			"6089343320": {
+				"username": "Cactus337",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "56"
+			},
+			"989880984": {
+				"username": "telegrmakar",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "57"
+			},
+			"1159780329": {
+				"username": null,
+				"balance": 0,
+				"banned": false,
+				"unique_id": "58"
+			},
+			"5647542773": {
+				"username": "Pwgaw",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "59"
+			},
+			"7962469765": {
+				"username": "daniilgradus",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "60"
+			},
+			"7832089654": {
+				"username": "racercrf32",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "61"
+			},
+			"1388642486": {
+				"username": "AndriiYurochko1",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "62"
+			},
+			"7556877911": {
+				"username": "QQwinYT",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "63"
+			},
+			"7161865293": {
+				"username": "Nekit_SZR",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "64"
+			},
+			"1145278968": {
+				"username": "AngelZabo",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "65"
+			},
+			"7879901427": {
+				"username": "grlway",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "66"
+			},
+			"5387875708": {
+				"username": "Ipuchij2340",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "67"
+			},
+			"5175798489": {
+				"username": "retil_8021",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "68"
+			},
+			"2098425949": {
+				"username": "Beluga22877",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "69"
+			},
+			"6042353042": {
+				"username": "MU_BMECTE",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "70"
+			},
+			"6852112988": {
+				"username": "rusvolcorps0",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "71"
+			},
+			"5301821215": {
+				"username": "CTPAX_D0KSEROB",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "72"
+			},
+			"7839960915": {
+				"username": "Hlamidiyaz",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "73"
+			},
+			"5822718598": {
+				"username": "I_love_roltona",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "74"
+			},
+			"7682721527": {
+				"username": "Sp1rit_topovi",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "75"
+			},
+			"7930742937": {
+				"username": "Povelitel_Tapok",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "76"
+			},
+			"5233749710": {
+				"username": "Qqqwerkly",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "77",
+				"recipient_id": "8183044696"
+			},
+			"6110885613": {
+				"username": "mopsius328",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "78"
+			},
+			"7737397715": {
+				"username": null,
+				"balance": 0,
+				"banned": false,
+				"unique_id": "79"
+			},
+			"8100520179": {
+				"username": "iriska252b",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "80"
+			},
+			"1924111163": {
+				"username": "MboY16912",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "81"
+			},
+			"1471732816": {
+				"username": "ks51d",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "82"
+			},
+			"7544486850": {
+				"username": "timursper",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "83"
+			},
+			"7224235747": {
+				"username": "myloveiskeri",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "84"
+			},
+			"7998078799": {
+				"username": "Fbarsik",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "85"
+			},
+			"6765517055": {
+				"username": "W1_zard1",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "86"
+			},
+			"1466294903": {
+				"username": "cubzx",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "87"
+			},
+			"7460870160": {
+				"username": "Real_ffeflin",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "88"
+			},
+			"8038970688": {
+				"username": "motya_matvey42",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "22"
+			},
+			"5161053003": {
+				"username": "Hotlinevsvs",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "90",
+				"joined_at": "2025-03-28 11:24:14"
+			},
+			"6380095206": {
+				"username": "Pyrro_repo",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "91",
+				"joined_at": "2025-03-28 11:24:15"
+			},
+			"1584180283": {
+				"username": "Lonyspn",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "92",
+				"joined_at": "2025-03-28 11:24:15"
+			},
+			"1474205592": {
+				"username": "xonstudio",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "93",
+				"joined_at": "2025-03-28 11:25:42"
+			},
+			"1270994372": {
+				"username": "speedfresh",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "94",
+				"joined_at": "2025-03-28 11:30:04"
+			},
+			"7154748479": {
+				"username": "I_Like_Linux",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "95",
+				"joined_at": "2025-03-28 11:32:18"
+			},
+			"5334244976": {
+				"username": "Pidorgolyboi",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "96",
+				"joined_at": "2025-03-28 11:40:10",
+				"temp_recipient": "5334244976"
+			},
+			"7578382982": {
+				"username": "Samsung_Galaxy_Note8",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "97",
+				"joined_at": "2025-03-28 11:44:18"
+			},
+			"1459873891": {
+				"username": "IamNotNestt",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "98",
+				"joined_at": "2025-03-28 11:54:14",
+				"temp_recipient": "5301377325"
+			},
+			"5004066203": {
+				"username": "triplesirota",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "99",
+				"joined_at": "2025-03-28 11:58:12"
+			},
+			"1523016991": {
+				"username": "ohioManPag",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "100",
+				"joined_at": "2025-03-28 12:13:33"
+			},
+			"1043355522": {
+				"username": "no_GGH",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "101",
+				"joined_at": "2025-03-28 12:14:24"
+			},
+			"5000959892": {
+				"username": "CMOTPELKA",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "102",
+				"joined_at": "2025-03-28 12:31:31"
+			},
+			"5099186810": {
+				"username": "FRUKTOZA_bastard",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "103",
+				"joined_at": "2025-03-28 12:36:18"
+			},
+			"2096030954": {
+				"username": "kotofey_barsikovich",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "105",
+				"joined_at": "2025-04-02 15:55:09"
+			},
+			"7166270560": {
+				"username": "pdzlpnsk",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "104",
+				"joined_at": "2025-04-02 15:55:09"
+			},
+			"1789838272": {
+				"username": "Kostz98",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "106",
+				"joined_at": "2025-04-02 15:55:09"
+			},
+			"5514832193": {
+				"username": "kirillbloxru",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "107",
+				"joined_at": "2025-04-02 15:55:10"
+			},
+			"6908679052": {
+				"username": "Iaroslav_official",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "108",
+				"joined_at": "2025-04-02 15:55:10"
+			},
+			"6396661749": {
+				"username": "ZorinPolaroid",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "109",
+				"joined_at": "2025-04-11 21:50:08"
+			},
+			"935673827": {
+				"username": "Ow9191g",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "110",
+				"joined_at": "2025-04-12 13:59:24"
+			},
+			"7571488455": {
+				"username": "ryomen348",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "111",
+				"joined_at": "2025-04-12 13:59:25"
+			},
+			"7951977482": {
+				"username": "arsen6y",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "112",
+				"joined_at": "2025-04-12 13:59:26",
+				"temp_recipient": "7571488455"
+			},
+			"7835106882": {
+				"username": "Gerakliy_pickme",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "113",
+				"joined_at": "2025-04-12 14:19:47"
+			},
+			"7058895766": {
+				"username": "stepaandgd",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "114",
+				"joined_at": "2025-04-12 20:32:25"
+			},
+			"7899902121": {
+				"username": "MeragohBot1",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "115",
+				"joined_at": "2025-04-12 20:32:25"
+			},
+			"7177208266": {
+				"username": "headshot482",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "116",
+				"joined_at": "2025-04-13 09:32:02",
+				"referrer": "5004066203",
+				"referrals": []
+			},
+			"6593431432": {
+				"username": "kotik_Dyroua",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "117",
+				"joined_at": "2025-04-13 14:35:05",
+				"referrer": null,
+				"referrals": []
+			},
+			"2111725265": {
+				"username": "Sqware228",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "118",
+				"joined_at": "2025-04-14 07:58:37",
+				"referrer": null,
+				"referrals": []
+			},
+			"6135522856": {
+				"username": "YaromirBatyuk",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "119",
+				"joined_at": "2025-04-14 07:58:37",
+				"referrer": null,
+				"referrals": []
+			},
+			"7914584753": {
+				"username": "rezevos",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "120",
+				"joined_at": "2025-04-15 22:06:54",
+				"referrer": null,
+				"referrals": []
+			},
+			"5126078353": {
+				"username": "arscopro",
+				"balance": 0,
+				"banned": false,
+				"unique_id": "121",
+				"joined_at": "2025-04-18 21:11:33",
+				"referrer": null,
+				"referrals": []
+		},
+            // ... остальные пользователи из вашего JSON
+        };
         
         // Инициализация
         document.addEventListener('DOMContentLoaded', () => {
             // Скрываем основной терминал при загрузке
             document.getElementById('terminal').style.opacity = '0';
             
-            // Анимация кнопок входа
-            const loginButtons = document.querySelectorAll('.login-btn');
-            loginButtons.forEach((btn, index) => {
-                setTimeout(() => {
-                    btn.style.opacity = '1';
-                    btn.style.transform = 'translateY(0)';
-                }, 300 + index * 200);
-            });
+            // Проверяем сохраненную тему
+            if (localStorage.getItem('theme') === 'light') {
+                document.body.classList.add('light-theme');
+                document.getElementById('theme-toggle').checked = true;
+            }
             
             // Обновляем дату и время
             updateDateTime();
@@ -1268,7 +2718,168 @@
             
             // Инициализация PWA
             initPWA();
+            
+            // Проверяем, есть ли сохраненный пользователь
+            const savedUserId = localStorage.getItem('telegramId');
+            if (savedUserId && usersData[savedUserId]) {
+                loginUser(savedUserId);
+            }
         });
+        
+        // Переключение между вкладками авторизации
+        function switchAuthTab(tab) {
+            document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
+            
+            document.querySelector(`.auth-tab[onclick="switchAuthTab('${tab}')"]`).classList.add('active');
+            document.getElementById(`${tab}-auth`).classList.add('active');
+        }
+        
+        // Вход по Telegram ID
+        function loginWithTelegram() {
+            const telegramId = document.getElementById('telegram-id').value.trim();
+            const errorElement = document.getElementById('telegram-error');
+            
+            if (!telegramId) {
+                errorElement.textContent = 'Пожалуйста, введите Telegram ID';
+                errorElement.style.display = 'block';
+                return;
+            }
+            
+            if (usersData[telegramId]) {
+                if (usersData[telegramId].banned) {
+                    errorElement.textContent = 'Ваш аккаунт заблокирован';
+                    errorElement.style.display = 'block';
+                    return;
+                }
+                
+                loginUser(telegramId);
+                errorElement.style.display = 'none';
+            } else {
+                errorElement.textContent = 'Пользователь с таким ID не найден';
+                errorElement.style.display = 'block';
+            }
+        }
+        
+        // Вход по email и паролю
+        function loginWithEmail() {
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            const errorElement = document.getElementById('email-error');
+            
+            if (!email || !password) {
+                errorElement.textContent = 'Пожалуйста, заполните все поля';
+                errorElement.style.display = 'block';
+                return;
+            }
+            
+            // Имитация проверки email и пароля
+            // В реальном приложении здесь должен быть запрос к серверу
+            const foundUser = Object.values(usersData).find(user => 
+                user.email === email && user.password === password
+            );
+            
+            if (foundUser) {
+                const userId = Object.keys(usersData).find(key => usersData[key] === foundUser);
+                loginUser(userId);
+                errorElement.style.display = 'none';
+            } else {
+                errorElement.textContent = 'Неверный email или пароль';
+                errorElement.style.display = 'block';
+            }
+        }
+        
+        // Вход по номеру телефона
+        function loginWithPhone() {
+            const phone = document.getElementById('phone').value.trim();
+            const errorElement = document.getElementById('phone-error');
+            
+            if (!phone) {
+                errorElement.textContent = 'Пожалуйста, введите номер телефона';
+                errorElement.style.display = 'block';
+                return;
+            }
+            
+            // Имитация отправки SMS
+            alert(`Код подтверждения отправлен на номер ${phone}`);
+            
+            // В реальном приложении здесь должен быть запрос к серверу
+            // и проверка кода подтверждения
+            const foundUser = Object.values(usersData).find(user => 
+                user.phone === phone
+            );
+            
+            if (foundUser) {
+                const userId = Object.keys(usersData).find(key => usersData[key] === foundUser);
+                loginUser(userId);
+                errorElement.style.display = 'none';
+            } else {
+                errorElement.textContent = 'Пользователь с таким номером не найден';
+                errorElement.style.display = 'block';
+            }
+        }
+        
+        // Вход пользователя
+        function loginUser(telegramId) {
+            currentUser = usersData[telegramId];
+            currentUser.id = telegramId;
+            
+            // Сохраняем ID пользователя в localStorage
+            localStorage.setItem('telegramId', telegramId);
+            
+            // Обновляем данные пользователя в интерфейсе
+            updateUserData();
+            
+            // Показываем основной интерфейс
+            document.getElementById('login-screen').classList.add('hidden');
+            document.getElementById('terminal').style.opacity = '1';
+            
+            // Сбрасываем таймер неактивности
+            resetInactivityTimer();
+        }
+        
+        // Обновление данных пользователя
+        function updateUserData() {
+            if (!currentUser) return;
+            
+            // Аватар (первые буквы имени)
+            let avatarText = 'US';
+            if (currentUser.username) {
+                const nameParts = currentUser.username.split(/[ _]/);
+                avatarText = nameParts.map(part => part.charAt(0).toUpperCase()).join('').substring(0, 2);
+            }
+            
+            document.getElementById('user-avatar').textContent = avatarText;
+            document.getElementById('account-avatar').textContent = avatarText;
+            
+            // Имя пользователя
+            const username = currentUser.username || `Пользователь #${currentUser.unique_id}`;
+            document.getElementById('user-name').textContent = username;
+            document.getElementById('account-name').textContent = username;
+            
+            // Телефон (если есть)
+            const phone = currentUser.phone || `ID: ${currentUser.id}`;
+            document.getElementById('user-phone').textContent = phone;
+            document.getElementById('account-phone').textContent = phone;
+            
+            // Баланс
+            const formattedBalance = currentUser.balance.toLocaleString('ru-RU') + ' ₽';
+            document.getElementById('user-balance').textContent = formattedBalance;
+            document.getElementById('account-balance').textContent = formattedBalance;
+        }
+        
+        // Переключение темы
+        function toggleTheme() {
+            const body = document.body;
+            body.classList.toggle('light-theme');
+            
+            // Сохраняем выбор темы
+            if (body.classList.contains('light-theme')) {
+                localStorage.setItem('theme', 'light');
+            } else {
+                localStorage.setItem('theme', 'dark');
+            }
+        }
         
         // Инициализация клавиатуры
         function initKeyboard() {
@@ -1330,7 +2941,9 @@
             if (numericOnly) {
                 // Настраиваем цифровую клавиатуру
                 document.querySelectorAll('.keyboard-key').forEach(key => {
-                    if (/[0-9]/.test(key.getAttribute('data-key')) || key.getAttribute('data-key') === 'Backspace') {
+                    if (/[0-9]/.test(key.getAttribute('data-key'))) {
+                        key.style.display = 'flex';
+                    } else if (key.getAttribute('data-key') === 'Backspace') {
                         key.style.display = 'flex';
                     } else {
                         key.style.display = 'none';
@@ -1343,13 +2956,13 @@
                 });
             }
             
-            document.getElementById('keyboard').classList.add('visible');
+            document.getElementById('keyboard').style.transform = 'translateY(0)';
             activeInputField.focus();
         }
         
         // Скрыть клавиатуру
         function hideKeyboard() {
-            document.getElementById('keyboard').classList.remove('visible');
+            document.getElementById('keyboard').style.transform = 'translateY(100%)';
             activeInputField = null;
         }
         
@@ -1395,6 +3008,8 @@
         function returnToLogin() {
             document.getElementById('login-screen').classList.remove('hidden');
             document.getElementById('terminal').style.opacity = '0';
+            document.getElementById('telegram-id').value = '';
+            document.getElementById('login-error').style.display = 'none';
         }
         
         // Показать экран
@@ -1532,6 +3147,42 @@
             showScreen('payment-screen');
         }
         
+        // Выбор способа оплаты
+        function selectPaymentMethod(method) {
+            currentPaymentMethod = method;
+            
+            // Обновляем активные кнопки
+            document.querySelectorAll('.payment-method-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Показываем соответствующую форму
+            document.getElementById('sbp-form').classList.remove('active');
+            document.getElementById('cash-form').classList.remove('active');
+            document.getElementById(`${method}-form`).classList.add('active');
+            
+            // Обновляем QR-код для СБП
+            if (method === 'sbp') {
+                const amount = document.getElementById('payment-amount').value || '1000';
+                document.querySelector('.qr-code img').src = 
+                    `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=SBP:+79991234567;amount=${amount};comment=QiwiFAN`;
+            }
+        }
+        
+        // Проверка оплаты наличными
+        function checkCashPayment() {
+            const receiptNumber = document.getElementById('receipt-number').value;
+            
+            if (!receiptNumber) {
+                alert('Пожалуйста, введите номер квитанции');
+                return;
+            }
+            
+            // Имитация проверки квитанции
+            alert(`Квитанция №${receiptNumber} проверяется. Обычно это занимает до 15 минут.`);
+        }
+        
         // Обработка платежа
         function processPayment() {
             const account = document.getElementById('account-number').value;
@@ -1547,6 +3198,29 @@
                 return;
             }
             
+            // Для СБП показываем инструкцию
+            if (currentPaymentMethod === 'sbp') {
+                alert(`Для завершения платежа отправьте ${amount} ₽ на номер +7 (999) 123-45-67 с комментарием "Fyra Pay". После получения средств платеж будет автоматически обработан.`);
+                return;
+            }
+            
+            // Для наличных проверяем квитанцию
+            if (currentPaymentMethod === 'cash') {
+                const receiptNumber = document.getElementById('receipt-number').value;
+                if (!receiptNumber) {
+                    alert('Пожалуйста, введите номер квитанции');
+                    return;
+                }
+                alert(`Платеж по квитанции №${receiptNumber} будет обработан в течение 15 минут после проверки.`);
+                return;
+            }
+            
+            // Проверяем баланс пользователя
+            if (currentUser.balance < parseFloat(amount)) {
+                alert('Недостаточно средств на балансе');
+                return;
+            }
+            
             // Показываем загрузку
             const paymentForm = document.querySelector('.payment-form');
             paymentForm.innerHTML = `
@@ -1556,6 +3230,10 @@
             
             // Имитация задержки обработки платежа
             setTimeout(() => {
+                // Обновляем баланс пользователя
+                currentUser.balance -= parseFloat(amount);
+                updateUserData();
+                
                 // Показываем экран успеха
                 document.getElementById('success-service').textContent = currentProvider;
                 document.getElementById('success-account').textContent = account;
@@ -1607,6 +3285,12 @@
                 return;
             }
             
+            // Проверяем баланс пользователя
+            if (currentUser.balance < parseFloat(amount)) {
+                alert('Недостаточно средств на балансе');
+                return;
+            }
+            
             // Проверка номера карты (простая валидация)
             const cardRegex = /^\d{16}$/;
             if (!cardRegex.test(cardNumber.replace(/\s/g, ''))) {
@@ -1628,6 +3312,10 @@
             
             // Имитация задержки обработки вывода
             setTimeout(() => {
+                // Обновляем баланс пользователя
+                currentUser.balance -= parseFloat(amount);
+                updateUserData();
+                
                 withdrawForm.innerHTML = oldContent;
                 alert(`Успешно! ${amount} ₽ будут переведены на карту ${cardNumber.replace(/\d{4}(?=.)/g, '$& ')} в течение 3 рабочих дней`);
             }, 3000); // 3 секунды задержки
@@ -1636,6 +3324,8 @@
         // Выход из системы
         function logout() {
             isPhoneVerified = false;
+            currentUser = null;
+            localStorage.removeItem('telegramId');
             showScreen('login-screen');
         }
         
